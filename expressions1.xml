@@ -1,0 +1,27 @@
+<categories>
+  <category name="sop">
+    <expression name="testSop3"><![CDATA[
+print("dddd");
+]]></expression>
+    <category name="aaa">
+      <expression name="sop aaa"><![CDATA[sop aaa]]></expression>
+    </category>
+    <category name="aaa">
+      <expression name="sop aaa2"><![CDATA[sop aaa2]]></expression>
+    </category>
+  </category>
+  <category name="matrix">
+    <expression name="testSop"><![CDATA[
+print("aaaa");
+]]></expression>
+    <category name="aaa">
+      <expression name="mat aaa"><![CDATA[mat aaa]]></expression>
+    </category>
+    <expression name="mat"><![CDATA[mat]]></expression>
+  </category>
+  <category name="dop">
+    <category name="aaa">
+      <expression name="dop aaa"><![CDATA[dop aaa]]></expression>
+    </category>
+  </category>
+</categories>
