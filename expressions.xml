@@ -1,7 +1,4 @@
 <expressionSets>
-  <categories>
-    <category>sop</category>
-  </categories>
   <set name="slerp" category="matrix">
     <expression><![CDATA[p@orient = slerp(p@orient, p@opinput1_orient,ch("bias"));]]></expression>
   </set>
