@@ -177,7 +177,6 @@ bias = fit(@Frame, ch("start_frame"), ch("emit_frame"),0,1);
 
 @P = lerp(@P, v@opinput1_P, bias);]]></expression>
     <expression name="delete by speed"><![CDATA[if(length(@v)<ch("min_speed"))removepoint(geoself(),@ptnum);]]></expression>
-
     <category name="volume">
       <expression name="twist"><![CDATA[vector min,max;
 getbbox(1,min,max);
@@ -226,5 +225,12 @@ for(int i = 0; i< length; i++)
 }]]></expression>
     </category>
     <expression name="rotate packed rbd"><![CDATA[@P = qrotate(p@orient,(@P - v@pivot)) + v@packP;]]></expression>
+    <category name="aaa">
+      <expression name="test aaa"><![CDATA[aaa test]]></expression>
+    </category>
+  </category>
+  <category name="aaa">
+    <category name="aaa"/>
+    <category name="aaa"/>
   </category>
 </categories>

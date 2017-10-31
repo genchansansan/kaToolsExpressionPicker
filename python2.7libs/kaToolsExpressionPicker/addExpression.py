@@ -109,14 +109,17 @@ class presetXML:
 		#print [e.name for e in self.expressions]
 		pass
 
-	def saveXML(self, exp):
+	def saveXML(self, saveCategory, saveName, exp):
 		root = self.tree2.getroot()
 
-		accept, names = hou.ui.readMultiInput("Preset Name:\n(Use \"/\" for sub categories)", ["Category:", "Name:"], buttons=('OK','Cancel') , close_choice=1)
-		if accept == 1:
-			return
-		categories = names[0].split("/")
-		name = names[1]
+		#accept, names = hou.ui.readMultiInput("Preset Name:\n(Use \"/\" for sub categories)", ["Category:", "Name:"], buttons=('OK','Cancel') , close_choice=1)
+		#if accept == 1:
+		#	return
+		#categories = names[0].split("/")
+		#name = names[1]
+
+		categories = saveCategory.split("/")
+		name = saveName
 
 		expression = exp
 		expression = let.CDATA(expression)
@@ -130,16 +133,16 @@ class presetXML:
 		for i in range(len(categories)):
 			rootPath = rootPath + "/category"
 			foundCategories = parent.findall(rootPath + "[@name='" + categories[i] + "']")
-			print rootPath
+			#print rootPath
 			if len(foundCategories) >0:
 				parent = foundCategories[0]
-				print "found", parent.attrib[("name")]
+				#print "found", parent.attrib[("name")]
 			else:
 				categoryElement = let.Element("category")
 				categoryElement.set("name", categories[i])
 				parent.append(categoryElement)
 				parent = categoryElement
-				print "not found", parent.attrib[("name")]
+				#print "not found", parent.attrib[("name")]
 		parent.append(expressionElement)
 
 		self.tree2.write(self.XMLPath, encoding="utf-8", method="xml", pretty_print = True)
@@ -180,16 +183,6 @@ class presetXML:
 			category = "no category"
 		return category
 
-	def getElement(self, name):
-		root = self.tree2.getroot()
-		element = None
-		try:
-			element = root.find("./set[@name='" + name +"']")
-		except KeyError:
-			element = None
-		return element
-
-
 
 	def makeMenus(self):
 		root = self.tree2.getroot()
@@ -227,15 +220,37 @@ class presetXML:
 
 
 
-	def deleteExpression(self, name):
+	def deleteExpression(self, categoryList, name):
 		root = self.tree2.getroot()
 		length = len(name)
 		if length==0:
 			return
-		element = self.getElement(name)
+		element = self.getElement(categoryList, name)
+		parent =None
 		if element != None:
-			root.remove(element)
-			self.updateXMLFile()
+			for data in self.expressions:
+				if data.myselfData == element:
+					parent = data.parentData
+					break
+			if parent != None:
+				parent.remove(element)
+				self.updateXMLFile()
+		
+
+
+	def getElement(self, categoryList, name):
+		root = self.tree2.getroot()
+		element = None
+		rootPath = "."
+		for i in range(len(categoryList)):
+			rootPath = rootPath + "/category"
+			rootPath = rootPath + "[@name='" + categoryList[i] + "']"
+		rootPath = rootPath + "/expression[@name='" +  name + "']"
+		#print rootPath
+		foundCategories = root.findall(rootPath)
+		if len(foundCategories) >0:
+				element = foundCategories[0]
+		return element
 
 	def updateXMLFile(self):
 		self.tree2.write(self.XMLPath, encoding="utf-8", method="xml", pretty_print = True)

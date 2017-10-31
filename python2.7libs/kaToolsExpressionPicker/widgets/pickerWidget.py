@@ -3,12 +3,13 @@ import toolutils
 from PySide2 import QtWidgets, QtCore, QtGui
 
 from kaToolsExpressionPicker import addExpression, stylesheet
-from kaToolsExpressionPicker.widgets import expressionTreeWidget, snippet
+from kaToolsExpressionPicker.widgets import expressionTreeWidget, snippet, saveDialog
 
 reload(addExpression)
 reload(stylesheet)
 reload(expressionTreeWidget)
 reload(snippet)
+reload(saveDialog)
 
 class pickerWidget(QtWidgets.QFrame):
 
@@ -131,27 +132,37 @@ class pickerWidget(QtWidgets.QFrame):
 
 
     def onSaveClicked(self):
-        '''
-        self.preset = addExpression.presetXML()
-        selectecNodes = hou.selectedNodes()
-        selectecNode = None
-
-        if len(selectecNodes) == 0:
-            return
-        selectecNode = selectecNodes[0]
-        if selectecNode.type() == hou.sopNodeTypeCategory().nodeTypes()["attribwrangle"]:
-            kwargs = {"parms":[selectecNode.parm("snippet")]}
-            self.preset.saveXML(kwargs)
-        '''
-        self.preset = addExpression.presetXML()
-        self.preset.saveXML(self.textArea.toPlainText())
+        savedia = saveDialog.saveDialog()
+        result = savedia.exec_()
+        if result == QtWidgets.QDialog.Accepted:
+            category, name = savedia.getCatandName()
+            self.preset = addExpression.presetXML()
+            self.preset.saveXML(category, name, self.textArea.toPlainText())
+        self.onRefreshClicked()
         
 
 
     def onDeleteClicked(self):
-        selected = self.treeWidget.selectedItems()
-        self.deleteExpression(selected)
+        items = self.treeWidget.selectedItems()
+        if len(items)>0:
+            for item in items:
+                categoryList = self.getParentItems(item)
+                name = item.text(0)
+                self.preset.deleteExpression(categoryList, name)
+            self.onRefreshClicked()
 
+
+    def getParentItems(self, item):
+        if isinstance(item, QtWidgets.QTreeWidgetItem):
+            parentItem = item.parent()
+            if isinstance(parentItem, QtWidgets.QTreeWidgetItem):
+                categoryList = self.getParentItems(parentItem)
+                categoryList.append(parentItem.text(0))
+                return categoryList
+            else:
+                return []
+        else:
+            return []
 
     def onSnippetTextEdited(self):
         parm = hou.parm(self.pathLabel.text())
@@ -232,15 +243,7 @@ class pickerWidget(QtWidgets.QFrame):
                 item.child(0)
                 item.removeChild(item.child(0))
 
-
-    def deleteExpression(self, items):
-        length = len(items)
-        if length == 0:
-            return
-        else:
-            for item in items:
-                self.preset.deleteExpression(item.text(0))
-            self.onRefreshClicked()
+            
 
 
     def updateTree(self, menus, categories):
