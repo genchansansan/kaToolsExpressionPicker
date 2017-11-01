@@ -11,9 +11,30 @@ reload(expressionTreeWidget)
 reload(snippet)
 reload(saveDialog)
 
+class editFlags:
+    __edit = 0
+    __clear = 1
+    __current = 0
+    def __init__(self, init = 0):
+        self.setFlag(init)
+        pass
+
+    def flag(self):
+        return self.__current
+
+    def setFlag(self, val):
+        self.__current = val
+
+    def edit(self):
+        return self.__edit
+
+    def clear(self):
+        return self.__clear
+
 class pickerWidget(QtWidgets.QFrame):
 
     prevClicked = QtWidgets.QTreeWidgetItem()
+    flag = editFlags()
     
     def __init__(self, parent = None):
         #super(pickerWidget, self).__init__(parent)
@@ -164,14 +185,23 @@ class pickerWidget(QtWidgets.QFrame):
         else:
             return []
 
+
+
+
     def onSnippetTextEdited(self):
-        parm = hou.parm(self.pathLabel.text())
-        if parm != None:
-            parm.set(self.textArea.toPlainText())
-            self.pathLabel.setStyleSheet(stylesheet.styles["valid"])
-        else:
-            self.pathLabel.setText("Invalid. Drop a parameter:")
-            self.pathLabel.setStyleSheet(stylesheet.styles["invalid"])
+        if self.flag.flag() == self.flag.edit():
+            parm = hou.parm(self.pathLabel.text())
+            if parm != None:
+                parm.set(self.textArea.toPlainText())
+                self.pathLabel.setStyleSheet(stylesheet.styles["valid"])
+            else:
+                self.pathLabel.setText("Invalid. Drop a parameter:")
+                self.pathLabel.setStyleSheet(stylesheet.styles["invalid"])
+        elif self.flag.flag() == self.flag.clear():
+            pass
+
+        self.flag = editFlags()
+
 
 
     def onSearchTextEdited(self, text):
@@ -202,6 +232,8 @@ class pickerWidget(QtWidgets.QFrame):
 
 
     def onClearClicked(self):
+        self.pathLabel.setText("Cleared.")
+        self.flag.setFlag(self.flag.clear())
         self.textArea.setText("")
 
 
