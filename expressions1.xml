@@ -233,4 +233,7 @@ for(int i = 0; i< length; i++)
     <category name="aaa"/>
     <category name="aaa"/>
   </category>
+  <category name="aaaa">
+    <category name="aaddv"/>
+  </category>
 </categories>

@@ -12,7 +12,7 @@ class saveDialog(QtWidgets.QDialog):
         nameLayout = QtWidgets.QHBoxLayout()
         buttonLayout = QtWidgets.QHBoxLayout()
         catLabel = QtWidgets.QLabel("Category: ")
-        nameLabel = QtWidgets.QLabel("Name: ")
+        nameLabel = QtWidgets.QLabel("Name    : ")
         self.catTextLine = QtWidgets.QLineEdit()
         self.nameTextLine = QtWidgets.QLineEdit()
         okButton = QtWidgets.QPushButton("OK")

@@ -3,19 +3,42 @@ from PySide2 import QtWidgets, QtCore, QtGui
 
 
 class expressionTreeWidget(QtWidgets.QTreeWidget):
+    
+    selected = []
     mimeData = QtCore.QMimeData()
+
     def __init__(self, parent=None):
         QtWidgets.QTreeWidget.__init__(self, parent)
 
         self.setItemsExpandable(True)
         self.setDragEnabled(True)
         self.setDropIndicatorShown(True)
-        #self.setDragDropMode(QtWidgets.QAbstractItemView.DragDrop)
-        self.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
+        self.setAcceptDrops(True)
+        self.setDragDropMode(self.DragDrop)
+        #self.setDragDropMode(self.InternalMove)
         self.setAlternatingRowColors(True)
         self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
 
+    
+    def mousePressEvent(self, event):
+        super(expressionTreeWidget, self).mousePressEvent(event)
+        self.selected = self.selectedItems()
+        if len(self.selected)>0:
+            #self.mimeData = QtCore.QMimeData()
+            #mimeData.setData("application/treeItem", "1")
+            #self.mimeData.setData("text/plain", self.selected[0].text(0))
+            print "mouse press", self.mimeData.data("text/plain")
+            #mimeData = super(expressionTreeWidget, self).mimeData(self.selected)
+            drag = QtGui.QDrag(self)
+            #drag.setMimeData(mimeData)
+            drag.setMimeData(self.mimeData)
+            drag.exec_(QtCore.Qt.CopyAction | QtCore.Qt.MoveAction, QtCore.Qt.CopyAction)
+            #drag.start(QtCore.Qt.MoveAction | QtCore.Qt.CopyAction)
+            pass
+
     def mouseReleaseEvent(self, event):
+        #super(expressionTreeWidget, self).mouseReleaseEvent(event)
+        print "release: ", event
         pass
         '''
         return_val = super( QtWidgets.QTreeWidget, self ).mouseReleaseEvent( event )
@@ -28,21 +51,29 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
 
 
     def mouseMoveEvent(self, event):
-        drag = QtGui.QDrag(self)
-        drag.setMimeData(self.mimeData)
-        drag.exec_(QtCore.Qt.CopyAction | QtCore.Qt.MoveAction, QtCore.Qt.CopyAction)
-
+        #super(expressionTreeWidget, self).mouseMoveEvent(event)
+        print "move: ", event
+        pass
+        
     def searchChildren(self, parent):
         for child in parent.children():
-                #print child
                 if child:
                     if isinstance(child, QtGui.QTextFrame):
-                        #print child.childFrames()
                         pass
                     self.searchChildren(child)
 
     def dragEnterEvent(self, event):
+        #super(expressionTreeWidget, self).dragEnterEvent(event)
         event.acceptProposedAction()
+        print "dragenter: ", event.mimeData().text()
+
+    def dragMoveEvent(self, event):
+        #super(expressionTreeWidget, self).dragMoveEvent(event)
+        print "drag move"
+
 
     def dropEvent(self, event):
-        print event.mimeData().text()
+        #if event.mimeData().hasFormat(self.mimeTypes()[0]):
+        print "drop: ", event.mimeData().formats()
+        super(expressionTreeWidget, self).dropEvent(event)
+        

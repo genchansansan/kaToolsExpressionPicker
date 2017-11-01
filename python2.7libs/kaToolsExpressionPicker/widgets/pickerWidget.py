@@ -92,7 +92,7 @@ class pickerWidget(QtWidgets.QFrame):
         labelLayout.addWidget(self.clearButton)
         self.clearButton.clicked.connect(self.onClearClicked)
 
-        self.textArea = snippet.snippet(label = self.pathLabel)
+        self.textArea = snippet.snippet(pathLabel = self.pathLabel)
         self.textArea.setAcceptDrops(True)
         self.textArea.textChanged.connect(self.onSnippetTextEdited)
         
@@ -235,6 +235,7 @@ class pickerWidget(QtWidgets.QFrame):
         self.pathLabel.setText("Cleared.")
         self.flag.setFlag(self.flag.clear())
         self.textArea.setText("")
+        self.pathLabel.setStyleSheet(stylesheet.styles["initial"])
 
 
     
@@ -300,7 +301,7 @@ class pickerWidget(QtWidgets.QFrame):
             #print items
             if len(items) == 0:
                 parent = QtWidgets.QTreeWidgetItem(self.treeWidget)
-                parent.setFlags(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+                parent.setFlags(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled)
                 parent.setText(0, categories[i])
                 parent.setExpanded(False)
                 category = parent
@@ -315,7 +316,7 @@ class pickerWidget(QtWidgets.QFrame):
             
             font.setPointSize(10)
             child = QtWidgets.QTreeWidgetItem(category,[menus[2 * i], menus[2 * i + 1]])
-            child.setFlags(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+            child.setFlags(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled)
             for column in range(0, child.columnCount()):
                 child.setFont(column, font)
 

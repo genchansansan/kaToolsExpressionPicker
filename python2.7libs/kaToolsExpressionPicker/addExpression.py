@@ -226,7 +226,7 @@ class presetXML:
 		if length==0:
 			return
 		element = self.getElement(categoryList, name)
-		parent =None
+		parent = None
 		if element != None:
 			for data in self.expressions:
 				if data.myselfData == element:
