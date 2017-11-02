@@ -16,7 +16,19 @@ class snippet(QtWidgets.QTextEdit):
 
 
     def dragEnterEvent(self, event):
-        print "enter to text area", event.mimeData().text()
+        print "enter to text area", event.type()
+        if event.possibleActions() == QtCore.Qt.CopyAction:
+            print "copy action"
+        if event.possibleActions() == QtCore.Qt.MoveAction:
+            print "move action"
+        if event.possibleActions() == QtCore.Qt.LinkAction:
+            print "link action"
+        if event.possibleActions() == QtCore.Qt.ActionMask:
+            print "mask action"
+        if event.possibleActions() == QtCore.Qt.IgnoreAction:
+            print "mask action"
+        if event.possibleActions() == QtCore.Qt.TargetMoveAction:
+            print "mask action"
         event.accept()
         #event.acceptProposedAction()
         pass
