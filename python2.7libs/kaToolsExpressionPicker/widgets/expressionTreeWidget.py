@@ -14,8 +14,8 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
         self.setDragEnabled(True)
         self.setDropIndicatorShown(True)
         self.setAcceptDrops(True)
-        self.setDragDropMode(self.DragDrop)
-        #self.setDragDropMode(self.InternalMove)
+        #self.setDragDropMode(self.DragDrop)
+        self.setDragDropMode(self.InternalMove)
         self.setAlternatingRowColors(True)
         self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
 
@@ -24,10 +24,12 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
         super(expressionTreeWidget, self).mousePressEvent(event)
         self.selected = self.selectedItems()
         if len(self.selected)>0:
-            #self.mimeData = QtCore.QMimeData()
+            self.mimeData = QtCore.QMimeData()
             #mimeData.setData("application/treeItem", "1")
             #self.mimeData.setData("text/plain", self.selected[0].text(0))
-            print "mouse press", self.mimeData.data("text/plain")
+            self.mimeData.setText(self.selected[0].text(1))
+            #print self.selected[0].text(1)
+            #print "mouse press", self.mimeData.text()
             #mimeData = super(expressionTreeWidget, self).mimeData(self.selected)
             drag = QtGui.QDrag(self)
             #drag.setMimeData(mimeData)
@@ -52,7 +54,7 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
 
     def mouseMoveEvent(self, event):
         #super(expressionTreeWidget, self).mouseMoveEvent(event)
-        print "move: ", event
+        #print "move: ", event
         pass
         
     def searchChildren(self, parent):
@@ -65,11 +67,13 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
     def dragEnterEvent(self, event):
         #super(expressionTreeWidget, self).dragEnterEvent(event)
         event.acceptProposedAction()
-        print "dragenter: ", event.mimeData().text()
+        #print "dragenter: ", event.mimeData().text()
+        pass
 
     def dragMoveEvent(self, event):
         #super(expressionTreeWidget, self).dragMoveEvent(event)
-        print "drag move"
+        #print "drag move"
+        pass
 
 
     def dropEvent(self, event):

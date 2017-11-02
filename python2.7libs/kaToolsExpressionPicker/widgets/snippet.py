@@ -11,32 +11,26 @@ class snippet(QtWidgets.QTextEdit):
     def __init__(self, parent=None, pathLabel = None):
         super(snippet, self).__init__(parent)
         self.pathLabel = pathLabel
-
         self.setFontPointSize(12)
+        self.setAcceptRichText(True)
 
 
     def dragEnterEvent(self, event):
-        print "enter to text area", event.type()
-        if event.possibleActions() == QtCore.Qt.CopyAction:
-            print "copy action"
-        if event.possibleActions() == QtCore.Qt.MoveAction:
-            print "move action"
-        if event.possibleActions() == QtCore.Qt.LinkAction:
-            print "link action"
-        if event.possibleActions() == QtCore.Qt.ActionMask:
-            print "mask action"
-        if event.possibleActions() == QtCore.Qt.IgnoreAction:
-            print "mask action"
-        if event.possibleActions() == QtCore.Qt.TargetMoveAction:
-            print "mask action"
-        event.accept()
-        #event.acceptProposedAction()
-        pass
+        super(snippet, self).dragEnterEvent(event)
+        #print "enter to text area", event.type()
+        #event.accept()
+        event.acceptProposedAction()
+
+    def dragMoveEvent(self, event):
+        super(snippet, self).dragMoveEvent(event)
+        #print "drag move", event.mimeData().formats()
+        #event.accept()
+        event.acceptProposedAction()
 
 
     def dropEvent(self, event):
         text = event.mimeData().text()
-        print text, event.mimeData().formats()
+        print event.mimeData().formats()
         parm = hou.parm(text)
         if parm != None:
             mime = QtCore.QMimeData()
@@ -44,12 +38,18 @@ class snippet(QtWidgets.QTextEdit):
             newEvent = QtGui.QDropEvent(event.pos(), event.dropAction(), mime, event.mouseButtons(), event.keyboardModifiers())
             super(snippet, self).dropEvent(newEvent)
             self.pathLabel.setText(text)
-            self.setText(parm.eval())
+            if parm.eval() != "":
+                self.setText(parm.eval())
+            else:
+                pass
             self.pathLabel.setStyleSheet(stylesheet.styles["valid"])
         else:
             if hou.parm(self.pathLabel.text()) != None:
                 if hou.node(text) == None:
+                    if self.toPlainText() == "":
+                        self.setText(" ")
                     super(snippet, self).dropEvent(event)
+                    #self.insertFromMimeData(event.mimeData())
                     #self.pathLabel.setStyleSheet(stylesheet.styles["valid"])
                     if hou.parm(self.pathLabel.text()).name() == "snippet":
                         self.parmCreate(hou.parm(self.pathLabel.text()).node())
@@ -67,6 +67,7 @@ class snippet(QtWidgets.QTextEdit):
                 super(snippet, self).dropEvent(newEvent)
                 self.pathLabel.setText("Invalid. Drop a parameter first:")
                 self.pathLabel.setStyleSheet(stylesheet.styles["invalid"])
+
 
 
 

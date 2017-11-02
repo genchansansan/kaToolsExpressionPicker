@@ -93,7 +93,7 @@ class pickerWidget(QtWidgets.QFrame):
         self.clearButton.clicked.connect(self.onClearClicked)
 
         self.textArea = snippet.snippet(pathLabel = self.pathLabel)
-        self.textArea.setAcceptDrops(True)
+        #self.textArea.setAcceptDrops(True)
         self.textArea.textChanged.connect(self.onSnippetTextEdited)
         
         
@@ -278,52 +278,7 @@ class pickerWidget(QtWidgets.QFrame):
 
             
 
-
-    def updateTree(self, menus, categories):
-        # Add expressions to the tree widget
-        try:
-            if self.treeWidget.itemPressed is not None:
-                self.treeWidget.itemPressed.disconnect()
-            if self.treeWidget.itemDoubleClicked is not None:
-                self.treeWidget.itemDoubleClicked.disconnect()
-        except Exception:
-            #print Exception
-            pass
-
-        self.clear()
-        
-        num = len(menus)/2
-
-        for i in range(0, num):
-            font = None
-            category = None
-            items = self.treeWidget.findItems(categories[i], 0)
-            #print items
-            if len(items) == 0:
-                parent = QtWidgets.QTreeWidgetItem(self.treeWidget)
                 parent.setFlags(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled)
-                parent.setText(0, categories[i])
-                parent.setExpanded(False)
-                category = parent
-
-                font = category.font(0)
-                font.setPointSize(11)
-                category.setFont(0, font)
-            else:
-                category = items[0]
-                font = category.font(0)
-
-            
-            font.setPointSize(10)
-            child = QtWidgets.QTreeWidgetItem(category,[menus[2 * i], menus[2 * i + 1]])
-            child.setFlags(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled)
-            for column in range(0, child.columnCount()):
-                child.setFont(column, font)
-
-        
-        self.treeWidget.itemPressed.connect(self.onItemPressed)
-        self.treeWidget.itemDoubleClicked.connect(self.onItemDoubleClicked)
-
 
 
     def updateTree(self):
@@ -357,7 +312,7 @@ class pickerWidget(QtWidgets.QFrame):
                             items.append(parent.child(i))
                 if len(items) == 0:
                     parent = QtWidgets.QTreeWidgetItem(parent)
-                    parent.setFlags(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+                    parent.setFlags(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled)
                     parent.setText(0, categoryName)
                     parent.setExpanded(False)
 
@@ -372,7 +327,7 @@ class pickerWidget(QtWidgets.QFrame):
             child = QtWidgets.QTreeWidgetItem(parent)
             child.setText(0, expression.name)
             child.setText(1, expression.expression)
-            child.setFlags(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+            child.setFlags(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled)
 
             font.setPointSize(10)
             font.setBold(False)
