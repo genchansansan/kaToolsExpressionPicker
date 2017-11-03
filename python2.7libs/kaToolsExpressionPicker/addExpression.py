@@ -109,14 +109,10 @@ class presetXML:
 		#print [e.name for e in self.expressions]
 		pass
 
+
+
 	def saveXML(self, saveCategory, saveName, exp):
 		root = self.tree2.getroot()
-
-		#accept, names = hou.ui.readMultiInput("Preset Name:\n(Use \"/\" for sub categories)", ["Category:", "Name:"], buttons=('OK','Cancel') , close_choice=1)
-		#if accept == 1:
-		#	return
-		#categories = names[0].split("/")
-		#name = names[1]
 
 		categories = saveCategory.split("/")
 		name = saveName
@@ -148,10 +144,13 @@ class presetXML:
 		self.tree2.write(self.XMLPath, encoding="utf-8", method="xml", pretty_print = True)
 
 
+
+
 	def findWhereToAdd(self, element):
 		if element.tag != "expression":
 			exsistingCategories = list(element)
 			pass
+
 
 
 	def exportExpression(self, kwargs):
@@ -162,15 +161,20 @@ class presetXML:
 		category = self.getCategory(kwargs)
 		return category
 
+
+
 	def paste(self, kwargs):
 		expression = self.getExpression(kwargs)
 		kwargs["parms"][0].set(kwargs["parms"][0].eval() + expression)
+
 
 
 	def getExpression(self, kwargs):
 		root = self.tree2.getroot()
 		expression = root.find("./set[@name='" + kwargs["selectedlabel"] +"']").find('expression').text
 		return expression
+
+
 
 	def getCategory(self, kwargs):
 		root = self.tree2.getroot()
@@ -193,30 +197,6 @@ class presetXML:
 				self.menus.append(menuset.attrib[("name")])
 		return self.menus
 
-		
-
-	def saveXMLDEL(self,kwargs):
-		root = self.tree2.getroot()
-
-		#accept, name = hou.ui.readInput("Preset Name:", buttons=('OK','Cancel'), close_choice=1)
-		accept, names = hou.ui.readMultiInput("Preset Name:", ["Category:", "Name:"], buttons=('OK','Cancel'), default_choice=0, close_choice=1)
-		if accept == 1:
-			return
-		category = names[0]
-		name = names[1]
-
-		expression = kwargs["parms"][0].eval()
-		expression = let.CDATA(expression)
-
-		setElement = let.Element("set")
-		setElement.set("name", name)
-		setElement.set("category", category)
-		expressionElement = let.Element("expression")
-		expressionElement.text = expression
-		root.append(setElement)
-		setElement.append(expressionElement)
-
-		self.tree2.write(self.XMLPath, encoding="utf-8", method="xml", pretty_print = True)
 
 
 
@@ -252,6 +232,22 @@ class presetXML:
 				element = foundCategories[0]
 		return element
 
+
+
 	def updateXMLFile(self):
 		self.tree2.write(self.XMLPath, encoding="utf-8", method="xml", pretty_print = True)
+
+
+
+
+	def sortXML(self):
+		root = self.tree2.getroot()
+		self.sortOneLevel(root)
+		self.updateXMLFile()
+		pass
+
+
+	def sortOneLevel(self, parent):
+		parent[:] = sorted(parent, key=lambda element:element[("name")])
+
 
