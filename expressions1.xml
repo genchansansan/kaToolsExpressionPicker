@@ -1,6 +1,38 @@
 <categories>
+  <category name="aaa">
+    <category name="aaa"/>
+    <category name="aaa"/>
+  </category>
+  <category name="aaaa">
+    <category name="aaddv"/>
+    <expression name="zzzz"><![CDATA[zzzz]]></expression>
+  </category>
+  <category name="bbbb">
+    <expression name="bbbbb"><![CDATA[bbbbbbbbbb]]></expression>
+  </category>
   <category name="sop">
-    <expression name="slerp"><![CDATA[p@orient = slerp(p@orient, p@opinput1_orient,ch("bias"));]]></expression>
+    <category name="aaa"/>
+    <expression name="add point"><![CDATA[addpoint(geoself(),{0,0,0});]]></expression>
+    <expression name="alphabet"><![CDATA[string alphabet[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+]]></expression>
+    <category name="atr">
+      <expression name="create ID"><![CDATA[i@id = @ptnum;]]></expression>
+      <expression name="create grad"><![CDATA[v@grad = (@P - min)/(max-min);]]></expression>
+      <expression name="create name"><![CDATA[s@name = chs("name");]]></expression>
+      <expression name="create nextid"><![CDATA[i@nextid=@numpt;]]></expression>
+      <expression name="create orietn"><![CDATA[@orient = set(0,0,0,1);]]></expression>
+      <expression name="create v"><![CDATA[@v = set(chv("init"));]]></expression>
+    </category>
+    <expression name="cpoy atr randomly"><![CDATA[int nunique = nuniqueval(1, "point", chs("search_atr"));
+float rand = rand((i@ptnum + ch("seed")+0.21) + (ch("seed")));
+rand = fit01(rand, 0, nunique);
+
+i@ = uniqueval(1, "point", chs("search_atr"), floor(rand));]]></expression>
+    <expression name="delete by age"><![CDATA[float age = fit(@age,ch("min"), ch("max"), 0, 1);
+
+float rand = rand((@ptnum + ch("seed")+0.21) + (ch("seed")));
+
+if(age>=rand)removepoint(geoself(),@ptnum);]]></expression>
     <expression name="delete by attrib val list detail"><![CDATA[string vals = chs("val_list");
 string valList[] = split(vals, " ");
 int len = len(valList);
@@ -11,15 +43,6 @@ for(int i =0; i < len; i++)
     removepoint(geoself(),pt);
 
 }]]></expression>
-    <expression name="fit and ramp"><![CDATA[float grad = fit(@P.y,ch("min"),ch("max"),0,1);
-grad = chramp("remap_grad",grad);]]></expression>
-    <expression name="extract N and up"><![CDATA[v@up = {0,1,0};
-@N = {0,0,1};
-v@up = qrotate(p@orient, v@up);
-@N = qrotate(p@orient, @N);]]></expression>
-    <expression name="delete randomly"><![CDATA[float rand = rand((i@id + ch("seed")+0.21) + (ch("seed")));
-
-if(rand > ch("keep_rate"))removepoint(geoself(),@ptnum);]]></expression>
     <expression name="delete by attrib val list pt"><![CDATA[string vals = chs("val_list");
 string valList[] = split(vals, " ");
 int len = len(valList);
@@ -31,11 +54,121 @@ for(int i =0; i < len; i++)
         removepoint(geoself(),@ptnum);
     }
 }]]></expression>
+    <expression name="delete by fresnel"><![CDATA[vector localP= -ptransform(chs("to_space"), @P);
+vector localN= ntransform(chs("to_space"), @N);
+
+float dot = dot(normalize(localP),normalize(localN));
+dot = fit(dot,-1,1,0,1);
+
+if(dot<ch("val"))removepoint(geoself(),@ptnum);]]></expression>
+    <expression name="delete by speed"><![CDATA[if(length(@v)<ch("min_speed"))removepoint(geoself(),@ptnum);]]></expression>
+    <expression name="delete randomly"><![CDATA[float rand = rand((i@id + ch("seed")+0.21) + (ch("seed")));
+
+if(rand > ch("keep_rate"))removepoint(geoself(),@ptnum);]]></expression>
     <expression name="delte by ndc"><![CDATA[vector ndcP = toNDC(chs("cam"),@P);
 
 if(ndcP.x<ch("uvxx") || ndcP.x+1>ch("uvxy"))removepoint(geoself(),@ptnum);
 else if(ndcP.y<ch("uvyx") || ndcP.y>1+ch("uvyy"))removepoint(geoself(),@ptnum);
 else if(ndcP.z<ch("uvzx") || ndcP.z>ch("uvzy"))removepoint(geoself(),@ptnum);]]></expression>
+    <expression name="extract N and up"><![CDATA[v@up = {0,1,0};
+@N = {0,0,1};
+v@up = qrotate(p@orient, v@up);
+@N = qrotate(p@orient, @N);]]></expression>
+    <expression name="fit and ramp"><![CDATA[float grad = fit(@P.y,ch("min"),ch("max"),0,1);
+grad = chramp("remap_grad",grad);]]></expression>
+    <expression name="get bounding box"><![CDATA[vector min,max;
+getbbox(0,min,max);]]></expression>
+    <expression name="get box of bounding box"><![CDATA[vector min,max;
+getbbox(1,min,max);
+
+vector pattern[] = {{0,0,0},{1,0,0},{1,0,1},{0,0,1},{0,1,0},{1,1,0},{1,1,1},{0,1,1}};
+
+float boundx[] = array(min.x, max.x);
+float boundy[] = array(min.y, max.y);
+float boundz[] = array(min.z, max.z);
+
+@P = set(boundx[int(pattern[@ptnum].x)], boundy[int(pattern[@ptnum].y)], boundz[int(pattern[@ptnum].z)]);
+
+
+]]></expression>
+    <category name="grammer">
+      <expression name="for loop"><![CDATA[int length=0;
+
+for(int i = 0; i< length; i++)
+{
+}]]></expression>
+      <expression name="if"><![CDATA[if()
+{
+}
+else
+{
+}]]></expression>
+    </category>
+    <expression name="mix P by frame"><![CDATA[float bias;
+
+bias = fit(@Frame, ch("start_frame"), ch("emit_frame"),0,1);
+
+@P = lerp(@P, v@opinput1_P, bias);]]></expression>
+    <expression name="near point"><![CDATA[int nearPt = nearpoint(1, @P);
+vector nearP = point(1, "P",nearPt);]]></expression>
+    <expression name="near points"><![CDATA[int nearPts[] = nearpoints(1,@P,ch("max_dist",chi("max_pts")));]]></expression>
+    <expression name="point cloud"><![CDATA[int handle = pcopen(1,"P",@P,ch("rad"),chi("max_pts"));
+
+int num = pcnumfound(handle);
+if(num > 0)
+{
+    vector p = pcfilter(handle, "P");
+}]]></expression>
+    <expression name="print"><![CDATA[printf("aa");]]></expression>
+    <category name="python">
+      <expression name="delelte if atr val is 0"><![CDATA[node = hou.pwd()
+geo = node.geometry()
+
+# Add code to modify contents of geo.
+# Use drop down menu to select examples.
+
+
+
+atrs = [atr for atr in geo.pointAttribs() if atr.name().find("group_") != -1]
+print atrs
+pts = []
+
+for pt in geo.points():
+    delPt = True
+    for atr in atrs:
+        if pt.attribValue(atr) == 1:
+            delPt = False
+            break
+    if delPt == True:
+        pts.append(pt)
+
+
+geo.deletePoints(pts)
+        ]]></expression>
+    </category>
+    <expression name="rand"><![CDATA[float rand = rand((@ptnum + ch("seed")+0.21) + (ch("seed")));
+
+]]></expression>
+    <expression name="rand and fit"><![CDATA[float rand = rand((@ptnum + ch("seed")+0.21) + (ch("seed")));
+
+rand= chramp("remap_grad",rand);
+rand = fit01(rand,ch("min"),ch("max"));
+
+]]></expression>
+    <expression name="remove points"><![CDATA[removepoint(geoself(),@ptnum);]]></expression>
+    <expression name="remove points by frame"><![CDATA[int num = chi("del_frames");
+int kill = 0;
+
+for(int i = 0; i < num; i++)
+{
+    float frame = ch("frame" + itoa(i+1));
+    if(@Frame == frame)
+    {
+        kill=1;
+        break;
+    }
+}
+if(kill == 0)removepoint(geoself(),@ptnum);]]></expression>
     <expression name="reverse slerp"><![CDATA[float qdotproduct(vector4 q1, q2)
 {
     return q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w;
@@ -75,108 +208,8 @@ q3 = qnormalize(q3);
 
 p@orient = q1 * cos(theta) + q3 * sin(theta);
 ]]></expression>
-    <expression name="volume sample"><![CDATA[int in = 1;
-
-float sample = volumesample(in,"collision",@P);
-vector grad = volumegradient(in,"collision",@P);]]></expression>
-    <category name="atr">
-      <expression name="create ID"><![CDATA[i@id = @ptnum;]]></expression>
-      <expression name="create v"><![CDATA[@v = set(chv("init"));]]></expression>
-      <expression name="create orietn"><![CDATA[@orient = set(0,0,0,1);]]></expression>
-      <expression name="create grad"><![CDATA[v@grad = (@P - min)/(max-min);]]></expression>
-      <expression name="create nextid"><![CDATA[i@nextid=@numpt;]]></expression>
-      <expression name="create name"><![CDATA[s@name = chs("name");]]></expression>
-    </category>
-    <expression name="add point"><![CDATA[addpoint(geoself(),{0,0,0});]]></expression>
-    <expression name="alphabet"><![CDATA[string alphabet[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-]]></expression>
-    <expression name="rand and fit"><![CDATA[float rand = rand((@ptnum + ch("seed")+0.21) + (ch("seed")));
-
-rand= chramp("remap_grad",rand);
-rand = fit01(rand,ch("min"),ch("max"));
-
-]]></expression>
-    <expression name="rand"><![CDATA[float rand = rand((@ptnum + ch("seed")+0.21) + (ch("seed")));
-
-]]></expression>
-    <expression name="point cloud"><![CDATA[int handle = pcopen(1,"P",@P,ch("rad"),chi("max_pts"));
-
-int num = pcnumfound(handle);
-if(num > 0)
-{
-    vector p = pcfilter(handle, "P");
-}]]></expression>
-    <expression name="remove points"><![CDATA[removepoint(geoself(),@ptnum);]]></expression>
-    <category name="python">
-      <expression name="delelte if atr val is 0"><![CDATA[node = hou.pwd()
-geo = node.geometry()
-
-# Add code to modify contents of geo.
-# Use drop down menu to select examples.
-
-
-
-atrs = [atr for atr in geo.pointAttribs() if atr.name().find("group_") != -1]
-print atrs
-pts = []
-
-for pt in geo.points():
-    delPt = True
-    for atr in atrs:
-        if pt.attribValue(atr) == 1:
-            delPt = False
-            break
-    if delPt == True:
-        pts.append(pt)
-
-
-geo.deletePoints(pts)
-        ]]></expression>
-    </category>
-    <expression name="near points"><![CDATA[int nearPts[] = nearpoints(1,@P,ch("max_dist",chi("max_pts")));]]></expression>
-    <expression name="near point"><![CDATA[int nearPt = nearpoint(1, @P);
-vector nearP = point(1, "P",nearPt);]]></expression>
-    <expression name="xyz dist"><![CDATA[int prim;
-vector uv;
-
-int in = 1;
-
-float dist = xyzdist(in, @P, prim, uv);
-vector hitP = primuv(in, "P", prim, uv);]]></expression>
-    <expression name="get bounding box"><![CDATA[vector min,max;
-getbbox(0,min,max);]]></expression>
-    <expression name="delete by fresnel"><![CDATA[vector localP= -ptransform(chs("to_space"), @P);
-vector localN= ntransform(chs("to_space"), @N);
-
-float dot = dot(normalize(localP),normalize(localN));
-dot = fit(dot,-1,1,0,1);
-
-if(dot<ch("val"))removepoint(geoself(),@ptnum);]]></expression>
-    <expression name="print"><![CDATA[printf("aa");]]></expression>
-    <expression name="cpoy atr randomly"><![CDATA[int nunique = nuniqueval(1, "point", chs("search_atr"));
-float rand = rand((i@ptnum + ch("seed")+0.21) + (ch("seed")));
-rand = fit01(rand, 0, nunique);
-
-i@ = uniqueval(1, "point", chs("search_atr"), floor(rand));]]></expression>
-    <expression name="remove points by frame"><![CDATA[int num = chi("del_frames");
-int kill = 0;
-
-for(int i = 0; i < num; i++)
-{
-    float frame = ch("frame" + itoa(i+1));
-    if(@Frame == frame)
-    {
-        kill=1;
-        break;
-    }
-}
-if(kill == 0)removepoint(geoself(),@ptnum);]]></expression>
-    <expression name="mix P by frame"><![CDATA[float bias;
-
-bias = fit(@Frame, ch("start_frame"), ch("emit_frame"),0,1);
-
-@P = lerp(@P, v@opinput1_P, bias);]]></expression>
-    <expression name="delete by speed"><![CDATA[if(length(@v)<ch("min_speed"))removepoint(geoself(),@ptnum);]]></expression>
+    <expression name="rotate packed rbd"><![CDATA[@P = qrotate(p@orient,(@P - v@pivot)) + v@packP;]]></expression>
+    <expression name="slerp"><![CDATA[p@orient = slerp(p@orient, p@opinput1_orient,ch("bias"));]]></expression>
     <category name="volume">
       <expression name="twist"><![CDATA[vector min,max;
 getbbox(1,min,max);
@@ -193,47 +226,16 @@ invert(mat);
 vector sampleP = (@P-origin) * mat;
 @density = volumesample(0, "density", sampleP);]]></expression>
     </category>
-    <expression name="delete by age"><![CDATA[float age = fit(@age,ch("min"), ch("max"), 0, 1);
+    <expression name="volume sample"><![CDATA[int in = 1;
 
-float rand = rand((@ptnum + ch("seed")+0.21) + (ch("seed")));
+float sample = volumesample(in,"collision",@P);
+vector grad = volumegradient(in,"collision",@P);]]></expression>
+    <expression name="xyz dist"><![CDATA[int prim;
+vector uv;
 
-if(age>=rand)removepoint(geoself(),@ptnum);]]></expression>
-    <expression name="get box of bounding box"><![CDATA[vector min,max;
-getbbox(1,min,max);
+int in = 1;
 
-vector pattern[] = {{0,0,0},{1,0,0},{1,0,1},{0,0,1},{0,1,0},{1,1,0},{1,1,1},{0,1,1}};
-
-float boundx[] = array(min.x, max.x);
-float boundy[] = array(min.y, max.y);
-float boundz[] = array(min.z, max.z);
-
-@P = set(boundx[int(pattern[@ptnum].x)], boundy[int(pattern[@ptnum].y)], boundz[int(pattern[@ptnum].z)]);
-
-
-]]></expression>
-    <category name="grammer">
-      <expression name="if"><![CDATA[if()
-{
-}
-else
-{
-}]]></expression>
-      <expression name="for loop"><![CDATA[int length=0;
-
-for(int i = 0; i< length; i++)
-{
-}]]></expression>
-    </category>
-    <expression name="rotate packed rbd"><![CDATA[@P = qrotate(p@orient,(@P - v@pivot)) + v@packP;]]></expression>
-    <category name="aaa">
-      <expression name="test aaa"><![CDATA[aaa test]]></expression>
-    </category>
-  </category>
-  <category name="aaa">
-    <category name="aaa"/>
-    <category name="aaa"/>
-  </category>
-  <category name="aaaa">
-    <category name="aaddv"/>
+float dist = xyzdist(in, @P, prim, uv);
+vector hitP = primuv(in, "P", prim, uv);]]></expression>
   </category>
 </categories>

@@ -190,6 +190,8 @@ class pickerWidget(QtWidgets.QFrame):
 
 
     def onSnippetTextEdited(self):
+        if "\t" in self.textArea.toPlainText():
+            print "tab"
         if self.flag.flag() == self.flag.edit():
             parm = hou.parm(self.pathLabel.text())
             if parm != None:

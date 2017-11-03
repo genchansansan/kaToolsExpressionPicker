@@ -73,6 +73,7 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
     def dragMoveEvent(self, event):
         #super(expressionTreeWidget, self).dragMoveEvent(event)
         #print "drag move"
+        event.acceptProposedAction()
         pass
 
 

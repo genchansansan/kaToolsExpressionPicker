@@ -242,12 +242,15 @@ class presetXML:
 
 	def sortXML(self):
 		root = self.tree2.getroot()
+		print "sort"
 		self.sortOneLevel(root)
 		self.updateXMLFile()
 		pass
 
 
 	def sortOneLevel(self, parent):
-		parent[:] = sorted(parent, key=lambda element:element[("name")])
+		parent[:] = sorted(parent, key=lambda child:child.get("name"))
+		for child in parent:
+			self.sortOneLevel(child)
 
 

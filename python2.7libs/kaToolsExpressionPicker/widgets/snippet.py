@@ -12,6 +12,7 @@ class snippet(QtWidgets.QTextEdit):
         super(snippet, self).__init__(parent)
         self.pathLabel = pathLabel
         self.setFontPointSize(12)
+        self.setTabStopWidth(20)
         self.setAcceptRichText(True)
 
 
