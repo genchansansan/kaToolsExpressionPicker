@@ -149,6 +149,7 @@ class pickerWidget(QtWidgets.QFrame):
         #menus = self.importXmlMenus()
         #menus, categories = self.importExpressions(menus)
         #self.updateTree(menus, categories)
+        self.preset.sortXML()
         self.updateTree()
 
 
@@ -259,13 +260,16 @@ class pickerWidget(QtWidgets.QFrame):
 
 
     def clear(self):
+        '''
         length = self.treeWidget.topLevelItemCount()
         if length > 0:
             for i in range(0, length):
                 #print i
                 self.clearItems(self.treeWidget.topLevelItem(0))
                 self.treeWidget.takeTopLevelItem(0)
+        '''
         self.treeWidget.clear()
+
 
 
     def clearItems(self, item):
