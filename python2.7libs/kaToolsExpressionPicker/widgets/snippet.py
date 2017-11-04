@@ -14,6 +14,7 @@ class snippet(QtWidgets.QTextEdit):
         self.setFontPointSize(12)
         self.setTabStopWidth(20)
         self.setAcceptRichText(True)
+        self.setMouseTracking(True)
 
 
     def dragEnterEvent(self, event):
@@ -70,6 +71,12 @@ class snippet(QtWidgets.QTextEdit):
                 self.pathLabel.setStyleSheet(stylesheet.styles["invalid"])
 
 
+    def mouseMoveEvent(self, event):
+        #print "mouse move"
+        super(snippet, self).mouseMoveEvent(event)
+        self.setFocus()
+
+
 
 
     def parmCreate(self, node):
@@ -80,3 +87,6 @@ class snippet(QtWidgets.QTextEdit):
             vexpressionmenu.createSpareParmsFromChCalls(node, parmname)
         except error:
             print "cannot create parms"
+
+
+
