@@ -18,6 +18,7 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
         self.setDragDropMode(self.InternalMove)
         self.setAlternatingRowColors(True)
         self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
 
     
     def mousePressEvent(self, event):
@@ -31,16 +32,11 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
             #print self.selected[0].text(1)
             #print "mouse press", self.mimeData.text()
             #mimeData = super(expressionTreeWidget, self).mimeData(self.selected)
-            drag = QtGui.QDrag(self)
-            #drag.setMimeData(mimeData)
-            drag.setMimeData(self.mimeData)
-            drag.exec_(QtCore.Qt.CopyAction | QtCore.Qt.MoveAction, QtCore.Qt.CopyAction)
-            #drag.start(QtCore.Qt.MoveAction | QtCore.Qt.CopyAction)
             pass
 
     def mouseReleaseEvent(self, event):
-        #super(expressionTreeWidget, self).mouseReleaseEvent(event)
-        print "release: ", event
+        super(expressionTreeWidget, self).mouseReleaseEvent(event)
+        #print "release: ", event
         pass
         '''
         return_val = super( QtWidgets.QTreeWidget, self ).mouseReleaseEvent( event )
@@ -55,6 +51,11 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
     def mouseMoveEvent(self, event):
         #super(expressionTreeWidget, self).mouseMoveEvent(event)
         #print "move: ", event
+        drag = QtGui.QDrag(self)
+        #drag.setMimeData(mimeData)
+        drag.setMimeData(self.mimeData)
+        drag.exec_(QtCore.Qt.CopyAction | QtCore.Qt.MoveAction, QtCore.Qt.CopyAction)
+        #drag.start(QtCore.Qt.MoveAction | QtCore.Qt.CopyAction)
         pass
         
     def searchChildren(self, parent):
@@ -79,6 +80,6 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
 
     def dropEvent(self, event):
         #if event.mimeData().hasFormat(self.mimeTypes()[0]):
-        print "drop: ", event.mimeData().formats()
+        #print "drop: ", event.mimeData().formats()
         super(expressionTreeWidget, self).dropEvent(event)
         

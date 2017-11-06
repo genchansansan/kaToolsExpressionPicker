@@ -11,10 +11,11 @@ class snippet(QtWidgets.QTextEdit):
     def __init__(self, parent=None, pathLabel = None):
         super(snippet, self).__init__(parent)
         self.pathLabel = pathLabel
-        self.setFontPointSize(12)
+        #self.setFontPointSize(12)
         self.setTabStopWidth(20)
         self.setAcceptRichText(True)
         self.setMouseTracking(True)
+
 
 
     def dragEnterEvent(self, event):
@@ -32,7 +33,7 @@ class snippet(QtWidgets.QTextEdit):
 
     def dropEvent(self, event):
         text = event.mimeData().text()
-        print event.mimeData().formats()
+        #print event.mimeData().formats()
         parm = hou.parm(text)
         if parm != None:
             mime = QtCore.QMimeData()
@@ -40,17 +41,19 @@ class snippet(QtWidgets.QTextEdit):
             newEvent = QtGui.QDropEvent(event.pos(), event.dropAction(), mime, event.mouseButtons(), event.keyboardModifiers())
             super(snippet, self).dropEvent(newEvent)
             self.pathLabel.setText(text)
-            if parm.eval() != "":
-                self.setText(parm.eval())
-            else:
-                pass
+            self.setText(parm.eval())
+
             self.pathLabel.setStyleSheet(stylesheet.styles["valid"])
         else:
             if hou.parm(self.pathLabel.text()) != None:
                 if hou.node(text) == None:
-                    if self.toPlainText() == "":
-                        self.setText(" ")
+                    currentSize = self.fontPointSize()
                     super(snippet, self).dropEvent(event)
+                    cursor = self.textCursor()
+                    self.selectAll()
+                    self.setFontPointSize(currentSize)
+                    self.setTextCursor(cursor)
+
                     #self.insertFromMimeData(event.mimeData())
                     #self.pathLabel.setStyleSheet(stylesheet.styles["valid"])
                     if hou.parm(self.pathLabel.text()).name() == "snippet":
@@ -63,10 +66,18 @@ class snippet(QtWidgets.QTextEdit):
                     self.pathLabel.setText("Invalid. Drop a parameter:")
                     self.pathLabel.setStyleSheet(stylesheet.styles["invalid"])
             else:
+                '''
                 mime = QtCore.QMimeData()
                 mime.setText("")
                 newEvent = QtGui.QDropEvent(event.pos(), event.dropAction(), mime, event.mouseButtons(), event.keyboardModifiers())
                 super(snippet, self).dropEvent(newEvent)
+                '''
+                currentSize = self.fontPointSize()
+                super(snippet, self).dropEvent(event)
+                cursor = self.textCursor()
+                self.selectAll()
+                self.setFontPointSize(currentSize)
+                self.setTextCursor(cursor)
                 self.pathLabel.setText("Invalid. Drop a parameter first:")
                 self.pathLabel.setStyleSheet(stylesheet.styles["invalid"])
 
@@ -75,6 +86,24 @@ class snippet(QtWidgets.QTextEdit):
         #print "mouse move"
         super(snippet, self).mouseMoveEvent(event)
         self.setFocus()
+
+
+    def keyPressEvent(self, event):
+        super(snippet, self).keyPressEvent(event)
+        if event.key() == QtCore.Qt.Key_Plus:
+            if event.modifiers() == QtCore.Qt.ControlModifier | QtCore.Qt.ShiftModifier:
+                #print "press contol plus"
+                cursor = self.textCursor()
+                self.selectAll()
+                self.setFontPointSize(self.fontPointSize()+2)
+                self.setTextCursor(cursor)
+        elif event.key() == QtCore.Qt.Key_Minus:
+            if event.modifiers() == QtCore.Qt.ControlModifier :
+                #print "press contol minus"
+                cursor = self.textCursor()
+                self.selectAll()
+                self.setFontPointSize(self.fontPointSize()-2)
+                self.setTextCursor(cursor)
 
 
 

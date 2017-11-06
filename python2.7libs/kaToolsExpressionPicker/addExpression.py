@@ -50,14 +50,19 @@ class presetXML:
 
 
 	def __init__(self, kwargs=None):
-		#scriptPath = os.path.split(os.path.split(os.path.split(__file__)[0])[0])
-		scriptPath = ""
-		for path in os.sys.path:
-			scriptPath = os.path.split(path)[0] + '/expressions1.xml'
-			if os.path.exists(scriptPath):
-				#print scriptPath
+		scriptPath = __file__
+		validPath = ""
+		while True:
+			if  os.path.split(scriptPath)[1] != "":
+				scriptPath = os.path.split(scriptPath)[0]
+				if scriptPath == "":
+					break
+				else:
+					if os.path.exists(scriptPath + '/expressions.xml'):
+						validPath = scriptPath + '/expressions.xml'
+			else:
 				break
-		self.XMLPath = scriptPath
+		self.XMLPath = validPath
 		parser = let.XMLParser(resolve_entities=False, remove_blank_text=True, strip_cdata=False)
 		self.tree2 = let.parse(self.XMLPath, parser)
 		self.kwargs = kwargs
@@ -242,7 +247,7 @@ class presetXML:
 
 	def sortXML(self):
 		root = self.tree2.getroot()
-		print "sort"
+		#print "sort"
 		self.sortOneLevel(root)
 		self.updateXMLFile()
 		pass
@@ -250,6 +255,7 @@ class presetXML:
 
 	def sortOneLevel(self, parent):
 		parent[:] = sorted(parent, key=lambda child:child.get("name"))
+		parent[:] = sorted(parent, key=lambda child:child.tag)
 		for child in parent:
 			self.sortOneLevel(child)
 
