@@ -1,13 +1,4 @@
 <categories>
-  <category name="aaa">
-    <category name="aaa"/>
-    <category name="aaa"/>
-    <category name="test"/>
-  </category>
-  <category name="aaaa">
-    <category name="aaddv"/>
-  </category>
-  <category name="bbbb"/>
   <category name="grammer">
     <expression name="if"><![CDATA[if()
 {

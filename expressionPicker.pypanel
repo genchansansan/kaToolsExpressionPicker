@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pythonPanelDocument>  
+<interfacesMenu type="toolbar">
+<interfaceItem name="expressionPicker"/>
+  </interfacesMenu>
+  <interfacesMenu type="panetab">
+      <interfaceItem name="expressionPicker"/>
+      </interfacesMenu>
+      <interface name="expressionPicker" label="Expression Picker" icon="MISC_python" help_url="">
+    <script><![CDATA[#https://www.off-soft.net/ja/develop/qt/qtb2.html
+
+import hou
+import toolutils
+from PySide2 import QtWidgets, QtCore, QtGui
+from kaToolsExpressionPicker.widgets import pickerWidget
+
+reload(pickerWidget)
+
+
+def createInterface():
+    root = pickerWidget.pickerWidget()
+    return root]]></script>
+    <includeInPaneTabMenu menu_position="0" create_separator="false"/>
+    <includeInToolbarMenu menu_position="0" create_separator="false"/>
+    <help><![CDATA[]]></help>
+  </interface>
+  </pythonPanelDocument>
