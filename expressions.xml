@@ -1,18 +1,2 @@
 <categories>
-  <category name="grammer">
-    <expression name="if"><![CDATA[if()
-{
-    
-}
-else
-{
-    
-}]]></expression>
-  </category>
-  <category name="sop">
-    <category name="del">
-      <expression name="delete points"><![CDATA[removepoint(geoself(),@ptnum);]]></expression>
-    </category>
-    <expression name="random"><![CDATA[float rand = rand((@ptnum+1.23) * (2.3+ch("seed")));]]></expression>
-  </category>
 </categories>
