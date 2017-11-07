@@ -19,6 +19,13 @@ HOUDINI_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionPicker;"
 HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionPicker;")
 
 
+**Functions
+
+
+**Shortcuts
+(text area)
+Ctrl + Shift + "+": zoom in
+Ctrl + "-" : zoom out 
 
 
 If you have any questions, feedbacks and/or ideas that may enhance usability of this tool, feel free to send a message to:
