@@ -44,9 +44,9 @@ HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionP
 
 **Shortcuts
 
-(text area)
-Ctrl + Shift + "+": zoom in
-Ctrl + "-" : zoom out 
+-(text area)
+--Ctrl + Shift + "+": zoom in
+--Ctrl + "-" : zoom out 
 
 
 
@@ -54,6 +54,7 @@ Ctrl + "-" : zoom out
 
 - Drag and drop inside the list doesn't really work. It looks like you can re-arrange the order, but if you hit refresh, the list goes back to the previous order.
 - If you press tab in the text area, cursor might jump to the end  of the text. 
+- If you duoble-click a expression on the list, it looks like you can edit it. However, it doesn't really update data expressions area stores in.
 - Even after you drag and drop a parameter, if you write something down on the parameter, it is not synced to the text area of this tool. (I wish the were completely synced each other.)
 
 
