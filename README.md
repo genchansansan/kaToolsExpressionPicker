@@ -1,4 +1,4 @@
-kaToolsExpressionPicker
+# kaToolsExpressionPicker
 
 Thank you for visiting my tool!
 This is module-based expression editor.
@@ -7,7 +7,7 @@ If you use one function over and over again, save it as a module, and you can gr
 
 
 
-**Installation
+### Installation
 
 Put this repository somewhere and add its path to both:
 
@@ -21,7 +21,7 @@ HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionP
 
 
 
-**Instructions
+### Instructions
 
 1. Type whatever code you might re-use.
 2. Hit "Save".
@@ -34,7 +34,7 @@ HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionP
     
     
     
-**Extra:
+### Extra:
 
 - When you have a bunch of expressions, you can filter expressions and categories.
 - If you want to sort expressions, hit "sort".
@@ -42,7 +42,7 @@ HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionP
 
 
 
-**Shortcuts
+### Shortcuts
 
 (text area)
 Ctrl + Shift + "+": zoom in
@@ -50,7 +50,7 @@ Ctrl + "-" : zoom out
 
 
 
-**Bug....ish
+### Bug....ish
 
 - Drag and drop inside the list doesn't really work. It looks like you can re-arrange the order, but if you hit refresh, the list goes back to the previous order.
 - If you press tab in the text area, cursor might jump to the end  of the text. 
