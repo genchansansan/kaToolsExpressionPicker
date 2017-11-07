@@ -1,4 +1,4 @@
-*kaToolsExpressionPicker
+# kaToolsExpressionPicker
 
 Thank you for visiting my tool!
 This is module-based expression editor.
@@ -7,12 +7,12 @@ If you use one function over and over again, save it as a module, and you can gr
 
 
 
-**Installation
+### Installation
 
 Put this repository somewhere and add its path to both:
 
--HOUDINI_PATH,
--HOUDINI_PYTHON_PANEL_PATH
+- HOUDINI_PATH,
+- HOUDINI_PYTHON_PANEL_PATH
 
 in houdini.env.
 (e.g. On Windows:
@@ -21,7 +21,7 @@ HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionP
 
 
 
-**Instructions
+### Instructions
 
 1. Type whatever code you might re-use.
 2. Hit "Save".
@@ -31,10 +31,10 @@ HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionP
 6.Drag and drop expressions from the list onto text area.
 7. You can edit code in the text area, Houdini shows result tight away.
     (Sorry, but no auto completion or syntax highlighting.)
-
     
     
-**Extra
+    
+### Extra:
 
 - When you have a bunch of expressions, you can filter expressions and categories.
 - If you want to sort expressions, hit "sort".
@@ -42,19 +42,18 @@ HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionP
 
 
 
-**Shortcuts
+### Shortcuts
 
-text area
-- Ctrl + Shift + "+" : Zoom In.
-- Ctrl + "-" : Zoom Out
+(text area)
+- Ctrl + Shift + "+": zoom in
+- Ctrl + "-" : zoom out 
 
 
 
-**Bug....ish
+### Bug....ish
 
 - Drag and drop inside the list doesn't really work. It looks like you can re-arrange the order, but if you hit refresh, the list goes back to the previous order.
 - If you press tab in the text area, cursor might jump to the end  of the text. 
-- If you duoble-click a expression on the list, it looks like you can edit it. However, it doesn't really update data expressions area stores in.
 - Even after you drag and drop a parameter, if you write something down on the parameter, it is not synced to the text area of this tool. (I wish the were completely synced each other.)
 
 
