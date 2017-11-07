@@ -1,4 +1,4 @@
-kaToolsExpressionPicker
+*kaToolsExpressionPicker
 
 Thank you for visiting my tool!
 This is module-based expression editor.
@@ -34,7 +34,7 @@ HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionP
     
     
     
-**Extra:
+**Extra
 
 - When you have a bunch of expressions, you can filter expressions and categories.
 - If you want to sort expressions, hit "sort".
@@ -42,10 +42,9 @@ HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionP
 
 
 
-**Shortcuts
-
-text area
--ctrl + shift + "+"
+Shortcuts
+Ctrl + Shift + "+" : Zoom In.
+Ctrl + "-" : Zoom Out.
 
 
 
