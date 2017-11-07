@@ -11,8 +11,8 @@ If you use one function over and over again, save it as a module, and you can gr
 
 Put this repository somewhere and add its path to both:
 
--HOUDINI_PATH,
--HOUDINI_PYTHON_PANEL_PATH
+- HOUDINI_PATH,
+- HOUDINI_PYTHON_PANEL_PATH
 
 in houdini.env.
 (e.g. On Windows:
@@ -45,8 +45,8 @@ HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionP
 ### Shortcuts
 
 (text area)
-Ctrl + Shift + "+": zoom in
-Ctrl + "-" : zoom out 
+- Ctrl + Shift + "+": zoom in
+- Ctrl + "-" : zoom out 
 
 
 
