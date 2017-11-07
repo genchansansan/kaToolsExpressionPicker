@@ -6,6 +6,7 @@ We can write vex/python code by drag & drop....plus a little bit of editing.
 If you use one function over and over again, save it as a module, and you can grab it whenever you want from the list view!
 
 
+
 **Installation
 
 Put this repository somewhere and add its path to both:
@@ -19,7 +20,9 @@ HOUDINI_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionPicker;"
 HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionPicker;")
 
 
-Instructions
+
+**Instructions
+
 1. Type whatever code you might re-use.
 2. Hit "Save".
 3. Type Category and name, and press OK.
@@ -30,22 +33,29 @@ Instructions
     (Sorry, but no auto completion or syntax highlighting.)
     
     
-Extra:
+    
+**Extra:
+
 - When you have a bunch of expressions, you can filter expressions and categories.
 - If you want to sort expressions, hit "sort".
 - If you want to delete a expression you have in the list, select it and hit "delete".
 
 
+
 **Shortcuts
+
 (text area)
 Ctrl + Shift + "+": zoom in
 Ctrl + "-" : zoom out 
 
 
-Bug....ish
+
+**Bug....ish
+
 - Drag and drop inside the list doesn't really work. It looks like you can re-arrange the order, but if you hit refresh, the list goes back to the previous order.
 - If you press tab in the text area, cursor might jump to the end  of the text. 
 - Even after you drag and drop a parameter, if you write something down on the parameter, it is not synced to the text area of this tool. (I wish the were completely synced each other.)
+
 
 
 
