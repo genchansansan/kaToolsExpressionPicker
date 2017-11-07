@@ -31,7 +31,7 @@ HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionP
 6.Drag and drop expressions from the list onto text area.
 7. You can edit code in the text area, Houdini shows result tight away.
     (Sorry, but no auto completion or syntax highlighting.)
-    
+
     
     
 **Extra
@@ -42,10 +42,11 @@ HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionP
 
 
 
-Shortcuts
+**Shortcuts
 
-Ctrl + Shift + "+"  Zoom In.
-Ctrl + "-"  Zoom Out.
+text area
+- Ctrl + Shift + "+" : Zoom In.
+- Ctrl + "-" : Zoom Out
 
 
 
