@@ -43,8 +43,9 @@ HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionP
 
 
 Shortcuts
-Ctrl + Shift + "+" : Zoom In.
-Ctrl + "-" : Zoom Out.
+
+Ctrl + Shift + "+"  Zoom In.
+Ctrl + "-"  Zoom Out.
 
 
 
