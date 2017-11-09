@@ -3,13 +3,14 @@ import toolutils
 from PySide2 import QtWidgets, QtCore, QtGui
 
 from kaToolsExpressionPicker import addExpression, stylesheet
-from kaToolsExpressionPicker.widgets import expressionTreeWidget, snippet, saveDialog
+from kaToolsExpressionPicker.widgets import expressionTreeWidget, snippet, saveDialog, snippetDialog
 
 reload(addExpression)
 reload(stylesheet)
 reload(expressionTreeWidget)
 reload(snippet)
 reload(saveDialog)
+reload(snippetDialog)
 
 class editFlags:
     __edit = 0
@@ -127,7 +128,12 @@ class pickerWidget(QtWidgets.QFrame):
 
 
     def onItemDoubleClicked(self, item, column):
-        self.treeWidget.editItem(item, column)
+        #self.treeWidget.editItem(item, column)
+        snippetDia = snippetDialog.snippetDialog()
+        result = snippetDia.exec_()
+        if result == QtWidgets.QDialog.Accepted:
+            pass
+
         
 
     def onItemClicked(self, item, column):
