@@ -44,6 +44,8 @@ class snippet(QtWidgets.QTextEdit):
             self.setText(parm.eval())
 
             self.pathLabel.setStyleSheet(stylesheet.styles["valid"])
+
+            self.setUpCallback(parm.node())
         else:
             if hou.parm(self.pathLabel.text()) != None:
                 if hou.node(text) == None:
@@ -119,3 +121,23 @@ class snippet(QtWidgets.QTextEdit):
 
 
 
+    def onParmChanged(self, **kwargs):
+        linkedParm = hou.parm(self.pathLabel.text())
+        parms = kwargs["parm_tuple"]
+        print len(parms)
+        for parm in parms:
+            if linkedParm != None and parm !=None:
+                if self.toPlainText() != parm.eval():
+                    self.setText(parm.eval())
+                    break
+        pass
+
+
+
+    def setUpCallback(self, node):
+        self.removeCallBack(node)
+        print "add"
+        node.addEventCallback((hou.nodeEventType.ParmTupleChanged,), self.onParmChanged)
+
+    def removeCallBack(self, node):
+        node.removeAllEventCallbacks()
