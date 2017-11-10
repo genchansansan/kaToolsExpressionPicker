@@ -5,7 +5,7 @@ This is module-based expression editor.
 We can write vex/python code by drag & drop....plus a little bit of editing.
 If you use one function over and over again, save it as a module, and you can grab it whenever you want from the list view!
 
-## Update
+## Update v0.1.017
 
 - If you press tab in the text area, cursor still keeps the position (It doesn't go away).
 - Not completely, but even when you edit code on a parameter, text area on this tool is updated (You need to set focus to somewhere from the parameter). 
