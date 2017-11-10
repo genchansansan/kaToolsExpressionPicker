@@ -5,7 +5,10 @@ This is module-based expression editor.
 We can write vex/python code by drag & drop....plus a little bit of editing.
 If you use one function over and over again, save it as a module, and you can grab it whenever you want from the list view!
 
+## Update
 
+- If you press tab in the text area, cursor still keeps the position (It doesn't go away).
+- Not completely, but even when you edit code on a parameter, text area on this tool is updated (You need to set focus to somewhere from the parameter). 
 
 ### Installation
 
@@ -19,6 +22,13 @@ in houdini.env.
 HOUDINI_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionPicker;"
 HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionPicker;")
 
+### Once you donwload it, I reccomend moving "expression.xml" to parent folder.
+** On Windows, if that file path is below: **
+** "C:/Users/foo/Documents/houdini16.0/kaToolsExpressionPicker/expression.xml", **
+** then move it parent like below: **
+** "C:/Users/foo/Documents/houdini16.0/expression.xml". **
+** This tool looks up original file path or above. (e.g. it looks up even : "C:/expression.xml") **
+** In this way, you don't lose expression-modules you have made when you update this tool. **
 
 
 ### Instructions
@@ -53,8 +63,7 @@ HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionP
 ### Bug....ish
 
 - Drag and drop inside the list doesn't really work. It looks like you can re-arrange the order, but if you hit refresh, the list goes back to the previous order.
-- If you press tab in the text area, cursor might jump to the end  of the text. 
-- Even after you drag and drop a parameter, if you write something down on the parameter, it is not synced to the text area of this tool. (I wish the were completely synced each other.)
+
 
 
 

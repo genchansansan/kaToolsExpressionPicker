@@ -41,12 +41,13 @@ class pickerWidget(QtWidgets.QFrame):
     def __init__(self, parent = None):
         #super(pickerWidget, self).__init__(parent)
         QtWidgets.QFrame.__init__(self, parent)
+        self.setStyleSheet(hou.qt.styleSheet())
         
         self.draggedItem = None
 
         layout = QtWidgets.QVBoxLayout()
+        #layout.setContentsMargins(0,0,0,0)
         self.splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
-
 
         ### set up buttons
         buttonLayout = QtWidgets.QHBoxLayout()
@@ -114,8 +115,6 @@ class pickerWidget(QtWidgets.QFrame):
         self.splitter.addWidget(self.textArea)
         layout.addLayout(labelLayout)
         self.setLayout(layout)
-
-        #print self.splitter.size()
         self.splitter.setSizes([250,100])
 
         self.preset = addExpression.presetXML()
@@ -123,6 +122,15 @@ class pickerWidget(QtWidgets.QFrame):
         #menus, categories = self.importExpressions(menus)
         #self.updateTree(menus, categories)
         self.updateTree()
+
+
+
+
+    def closeEvent(self, event):
+        if hou.parm(self.pathLabel.text()) !=None:
+            self.textArea.removeCallBack(hou.parm(self.pathLabel.text()).node())
+        super(pickerWidget,self).closeEvent(event)
+
 
 
 
@@ -207,12 +215,6 @@ class pickerWidget(QtWidgets.QFrame):
 
     def onSnippetTextEdited(self):
         text = self.textArea.toPlainText()
-        if "\t" in text:
-            text = text.replace("\t", "    ")
-            self.textArea.setText(text)
-            cursor = self.textArea.textCursor()
-            cursor.movePosition(QtGui.QTextCursor.End)
-            self.textArea.setTextCursor(cursor)
         if self.flag.flag() == self.flag.edit():
             parm = hou.parm(self.pathLabel.text())
             if parm != None:
@@ -224,10 +226,6 @@ class pickerWidget(QtWidgets.QFrame):
         elif self.flag.flag() == self.flag.clear():
             pass
         if text == "":
-            #cursor = self.textArea.textCursor()
-            #self.textArea.selectAll()
-            #self.textArea.setFontPointSize(self.currentSize)
-            #self.textArea.setTextCursor(cursor)
             font = QtGui.QFont()
             font.setPointSize(self.currentSize)
             self.textArea.setCurrentFont(font)

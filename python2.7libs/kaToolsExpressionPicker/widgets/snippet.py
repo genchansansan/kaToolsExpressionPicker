@@ -36,16 +36,27 @@ class snippet(QtWidgets.QTextEdit):
         #print event.mimeData().formats()
         parm = hou.parm(text)
         if parm != None:
-            mime = QtCore.QMimeData()
-            mime.setText("")
-            newEvent = QtGui.QDropEvent(event.pos(), event.dropAction(), mime, event.mouseButtons(), event.keyboardModifiers())
-            super(snippet, self).dropEvent(newEvent)
-            self.pathLabel.setText(text)
-            self.setText(parm.eval())
+            if hou.parm(self.pathLabel.text()) !=None:
+                self.removeCallBack(hou.parm(self.pathLabel.text()).node())
+            if isinstance(parm.eval(),str):
+                mime = QtCore.QMimeData()
+                mime.setText("")
+                newEvent = QtGui.QDropEvent(event.pos(), event.dropAction(), mime, event.mouseButtons(), event.keyboardModifiers())
+                super(snippet, self).dropEvent(newEvent)
 
-            self.pathLabel.setStyleSheet(stylesheet.styles["valid"])
+                self.pathLabel.setText(text)
+                self.setText(parm.eval())
 
-            self.setUpCallback(parm.node())
+                self.pathLabel.setStyleSheet(stylesheet.styles["valid"])
+
+                self.setUpCallback(parm.node())
+            else:
+                mime = QtCore.QMimeData()
+                mime.setText("")
+                newEvent = QtGui.QDropEvent(event.pos(), event.dropAction(), mime, event.mouseButtons(), event.keyboardModifiers())
+                super(snippet, self).dropEvent(newEvent)
+                self.pathLabel.setText("Invalid.Only String Parameter is acceptable:")
+                self.pathLabel.setStyleSheet(stylesheet.styles["invalid"])
         else:
             if hou.parm(self.pathLabel.text()) != None:
                 if hou.node(text) == None:
@@ -56,11 +67,11 @@ class snippet(QtWidgets.QTextEdit):
                     self.setFontPointSize(currentSize)
                     self.setTextCursor(cursor)
 
-                    #self.insertFromMimeData(event.mimeData())
-                    #self.pathLabel.setStyleSheet(stylesheet.styles["valid"])
                     if hou.parm(self.pathLabel.text()).name() == "snippet":
                         self.parmCreate(hou.parm(self.pathLabel.text()).node())
                 else:
+                    if hou.parm(self.pathLabel.text()) !=None:
+                        self.removeCallBack(hou.parm(self.pathLabel.text()).node())
                     mime = QtCore.QMimeData()
                     mime.setText("")
                     newEvent = QtGui.QDropEvent(event.pos(), event.dropAction(), mime, event.mouseButtons(), event.keyboardModifiers())
@@ -92,6 +103,12 @@ class snippet(QtWidgets.QTextEdit):
 
     def keyPressEvent(self, event):
         super(snippet, self).keyPressEvent(event)
+        text = self.toPlainText()
+        if "\t" in text:
+            doc = self.document()
+            cursor = doc.find("\t")
+            cursor.deleteChar()
+            cursor.insertText("    ")
         if event.key() == QtCore.Qt.Key_Plus:
             if event.modifiers() == QtCore.Qt.ControlModifier | QtCore.Qt.ShiftModifier:
                 #print "press contol plus"
@@ -114,7 +131,6 @@ class snippet(QtWidgets.QTextEdit):
         try:
             import vexpressionmenu
             parmname = 'snippet'
-
             vexpressionmenu.createSpareParmsFromChCalls(node, parmname)
         except error:
             print "cannot create parms"
@@ -122,22 +138,26 @@ class snippet(QtWidgets.QTextEdit):
 
 
     def onParmChanged(self, **kwargs):
-        linkedParm = hou.parm(self.pathLabel.text())
-        parms = kwargs["parm_tuple"]
-        print len(parms)
-        for parm in parms:
-            if linkedParm != None and parm !=None:
-                if self.toPlainText() != parm.eval():
-                    self.setText(parm.eval())
-                    break
-        pass
-
+        try:
+            linkedParm = hou.parm(self.pathLabel.text())
+            parms = kwargs["parm_tuple"]
+            
+            for parm in parms:
+                if linkedParm != None and parm !=None:
+                    if type(linkedParm.eval()) == type(parm.eval()):
+                        if self.toPlainText() != parm.eval():
+                            self.setText(parm.eval())
+                            break
+            pass
+        except error:
+            print error
 
 
     def setUpCallback(self, node):
         self.removeCallBack(node)
-        print "add"
+        #print "add"
         node.addEventCallback((hou.nodeEventType.ParmTupleChanged,), self.onParmChanged)
 
     def removeCallBack(self, node):
+        #print "remove event handler", node.name()
         node.removeAllEventCallbacks()

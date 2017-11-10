@@ -1,5 +1,5 @@
 from PySide2 import QtWidgets, QtCore, QtGui
-
+import hou
 
 class saveDialog(QtWidgets.QDialog):
 
@@ -35,6 +35,8 @@ class saveDialog(QtWidgets.QDialog):
         self.catTextLine.setFocus()
         okButton.clicked.connect(self.accept)
         cancelButton.clicked.connect(self.reject)
+
+        self.setStyleSheet(hou.qt.styleSheet())
 
 
     def getCatandName(self):
