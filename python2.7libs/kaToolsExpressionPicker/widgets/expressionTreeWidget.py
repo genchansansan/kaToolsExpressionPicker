@@ -1,5 +1,9 @@
 import hou
 from PySide2 import QtWidgets, QtCore, QtGui
+from kaToolsExpressionPicker import stylesheet
+
+
+reload(stylesheet)
 
 
 class expressionTreeWidget(QtWidgets.QTreeWidget):
@@ -19,6 +23,7 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
         self.setAlternatingRowColors(True)
         self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
         self.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.setStyleSheet(stylesheet.styles["tree"])
 
     
     def mousePressEvent(self, event):

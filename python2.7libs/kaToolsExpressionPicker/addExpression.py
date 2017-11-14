@@ -203,6 +203,17 @@ class presetXML:
 		return self.menus
 
 
+	def updateExpression(self, categoryList, name, newName, newExp):
+		root = self.tree2.getroot()
+		length = len(name)
+		if length==0:
+			return
+		element = self.getElement(categoryList, name)
+		#print element
+		if element != None:
+			element.set("name", newName)
+			element.text = newExp
+			self.updateXMLFile()
 
 
 	def deleteExpression(self, categoryList, name):
@@ -230,11 +241,14 @@ class presetXML:
 		for i in range(len(categoryList)):
 			rootPath = rootPath + "/category"
 			rootPath = rootPath + "[@name='" + categoryList[i] + "']"
-		rootPath = rootPath + "/expression[@name='" +  name + "']"
-		#print rootPath
-		foundCategories = root.findall(rootPath)
+		
+		foundCategories = root.findall(rootPath + "/expression[@name='" +  name + "']")
 		if len(foundCategories) >0:
 				element = foundCategories[0]
+		else:
+			foundCategories = root.findall(rootPath + "/category[@name='" +  name + "']")
+			if len(foundCategories) >0:
+					element = foundCategories[0]
 		return element
 
 

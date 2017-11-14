@@ -41,7 +41,6 @@ class pickerWidget(QtWidgets.QFrame):
     def __init__(self, parent = None):
         #super(pickerWidget, self).__init__(parent)
         QtWidgets.QFrame.__init__(self, parent)
-        self.setStyleSheet(hou.qt.styleSheet())
         
         self.draggedItem = None
 
@@ -122,6 +121,7 @@ class pickerWidget(QtWidgets.QFrame):
         #menus, categories = self.importExpressions(menus)
         #self.updateTree(menus, categories)
         self.updateTree()
+        self.setStyleSheet(hou.qt.styleSheet())
 
 
 
@@ -134,13 +134,23 @@ class pickerWidget(QtWidgets.QFrame):
 
 
 
-
     def onItemDoubleClicked(self, item, column):
         #self.treeWidget.editItem(item, column)
-        snippetDia = snippetDialog.snippetDialog()
+        newName = item.text(0)
+        newExp = item.text(1)
+        snippetDia = snippetDialog.snippetDialog(text=item.text(column))
         result = snippetDia.exec_()
         if result == QtWidgets.QDialog.Accepted:
-            pass
+            if column == 0:
+                newName = snippetDia.getNewText()
+            elif column == 1:
+                newExp = snippetDia.getNewText()
+            categoryList = self.getParentItems(item)
+            #print categoryList
+            self.preset = addExpression.presetXML()
+            self.preset.updateExpression(categoryList, item.text(0), newName, newExp)
+
+            self.onRefreshClicked()
 
         
 
@@ -184,7 +194,7 @@ class pickerWidget(QtWidgets.QFrame):
             category, name = savedia.getCatandName()
             self.preset = addExpression.presetXML()
             self.preset.saveXML(category, name, self.textArea.toPlainText())
-        self.onRefreshClicked()
+            self.onRefreshClicked()
         
 
 
@@ -231,8 +241,6 @@ class pickerWidget(QtWidgets.QFrame):
             self.textArea.setCurrentFont(font)
         else:
             self.currentSize = self.textArea.fontPointSize()
-        
-
         self.flag = editFlags()
 
 
@@ -323,7 +331,7 @@ class pickerWidget(QtWidgets.QFrame):
             for i in range(0, length):
                 item.child(0)
                 item.removeChild(item.child(0))
-                parent.setFlags(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled)
+                parent.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled) #QtCore.Qt.ItemIsEditable | 
 
 
     def updateTree(self):
@@ -368,7 +376,7 @@ class pickerWidget(QtWidgets.QFrame):
                             items.append(parent.child(i))
                 if len(items) == 0:
                     parent = QtWidgets.QTreeWidgetItem(parent)
-                    parent.setFlags(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled)
+                    parent.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled) #QtCore.Qt.ItemIsEditable | 
                     parent.setText(0, categoryName)
                     parent.setExpanded(False)
 
@@ -383,9 +391,9 @@ class pickerWidget(QtWidgets.QFrame):
             child = QtWidgets.QTreeWidgetItem(parent)
             child.setText(0, expression.name)
             child.setText(1, expression.expression)
-            child.setFlags(QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled)
+            child.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled) #QtCore.Qt.ItemIsEditable | 
             child.setToolTip(1, expression.expression)
-            #print child.sizeHint(1).width(), child.sizeHint(1).height()
+
             font.setPointSize(10)
             font.setBold(False)
             for column in range (child.columnCount()):
