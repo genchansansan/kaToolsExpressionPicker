@@ -2,7 +2,7 @@ import hou
 import toolutils
 from PySide2 import QtWidgets, QtCore, QtGui
 
-from kaToolsExpressionPicker import addExpression, stylesheet
+from kaToolsExpressionPicker import addExpression, stylesheet, vexSyntaxHighlighter
 from kaToolsExpressionPicker.widgets import expressionTreeWidget, snippet, saveDialog, snippetDialog
 
 reload(addExpression)
@@ -32,11 +32,43 @@ class editFlags:
     def clear(self):
         return self.__clear
 
+
+class pickerWidget1(QtWidgets.QFrame):
+    def __init__(self, parent = None):
+        super(pickerWidget, self).__init__(parent)
+
+
+        layout = QtWidgets.QVBoxLayout()
+
+        view = QtWidgets.QTreeView()
+        view.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        
+        model = QtGui.QStandardItemModel()
+        model.setHorizontalHeaderLabels(['col1', 'col2', 'col3'])
+        view.setModel(model)
+        #view.setUniformRowHeights(True)
+
+        for i in range(3):
+            parent1 = QtGui.QStandardItem('Family {}. Some long status text for sp'.format(i))
+            for j in range(3):
+                child1 = QtGui.QStandardItem('Child {}'.format(i*3+j))
+                child2 = QtGui.QStandardItem('row: {}, col: {}'.format(i, j+1))
+                child3 = QtGui.QStandardItem('row: {}, col: {}'.format(i, j+2))
+                parent1.appendRow([child1, child2, child3])
+            model.appendRow(parent1)
+            # span container columns
+            view.setFirstColumnSpanned(i, view.rootIndex(), True)
+
+        layout.addWidget(view)
+        self.setLayout(layout)
+
+
+
 class pickerWidget(QtWidgets.QFrame):
 
     prevClicked = QtWidgets.QTreeWidgetItem()
     flag = editFlags()
-    currentSize = 12
+    
     
     def __init__(self, parent = None):
         #super(pickerWidget, self).__init__(parent)
@@ -72,10 +104,10 @@ class pickerWidget(QtWidgets.QFrame):
         self.treeWidget.setColumnWidth(1, 800)
         self.treeWidget.setAutoScroll(False)
         self.treeWidget.setHeaderLabels(["Name", "Expression"])
-        #self.treeWidget.setFocusPolicy(QtWidgets.Qt.WheelFocus)
-        #self.treeWidget.itemPressed.connect(self.onItemPressed)
+
         self.treeWidget.itemClicked.connect(self.onItemClicked)
         self.treeWidget.itemDoubleClicked.connect(self.onItemDoubleClicked)
+        
 
         searchLayout = QtWidgets.QHBoxLayout()
         self.staticSearchText = QtWidgets.QLabel()
@@ -104,7 +136,7 @@ class pickerWidget(QtWidgets.QFrame):
         font = QtGui.QFont()
         font.setPointSize(12)
         self.textArea.setCurrentFont(font)
-        self.textArea.textChanged.connect(self.onSnippetTextEdited)
+        #self.textArea.textChanged.connect(self.onSnippetTextEdited)
         
         
         layout.addLayout(buttonLayout)
@@ -117,9 +149,7 @@ class pickerWidget(QtWidgets.QFrame):
         self.splitter.setSizes([250,100])
 
         self.preset = addExpression.presetXML()
-        #menus = self.importXmlMenus()
-        #menus, categories = self.importExpressions(menus)
-        #self.updateTree(menus, categories)
+        
         self.updateTree()
         self.setStyleSheet(hou.qt.styleSheet())
 
@@ -235,13 +265,15 @@ class pickerWidget(QtWidgets.QFrame):
                 self.pathLabel.setStyleSheet(stylesheet.styles["invalid"])
         elif self.flag.flag() == self.flag.clear():
             pass
-        if text == "":
-            font = QtGui.QFont()
-            font.setPointSize(self.currentSize)
-            self.textArea.setCurrentFont(font)
+        if text == "" or text.startswith("\n"):
+            #font = QtGui.QFont()
+            #font.setPointSize(self.currentSize)
+            #self.textArea.setCurrentFont(font)
+            pass
         else:
-            self.currentSize = self.textArea.fontPointSize()
-        self.flag = editFlags()
+            #self.currentSize = self.textArea.fontPointSize()
+            pass
+        self.flag.setFlag(self.flag.edit())
 
 
 
@@ -291,24 +323,26 @@ class pickerWidget(QtWidgets.QFrame):
         self.pathLabel.setStyleSheet(stylesheet.styles["initial"])
 
 
+
+
+    def rrrr(self):
+        print "resize"
+        
+        allItems = self.treeWidget.findItems("", QtCore.Qt.MatchStartsWith | QtCore.Qt.MatchRecursive)
+        for item in allItems:
+            count = item.childCount()
+            if count==0:
+                print item.expArea.toPlainText()
+                print item.expArea.viewport().size()
+                item.setSizeHint(1, item.expArea.document().size().toSize()*1.1)
+                item.expArea.setFixedHeight(item.expArea.document().size().height())
+
+        pass
+
     
 
 ############################################################
 
-
-    def importXmlMenus(self):
-        # Read Presets
-        menus = self.preset.makeMenus()
-        return menus
-
-
-    def importExpressions(self, menus):
-        num = len(menus)/2
-        categories = []
-        for i in range(0, num):
-            menus[i*2+1] = self.preset.exportExpression({"selectedlabel" : menus[i*2]})
-            categories.append(self.preset.exportCategory({"selectedlabel" : menus[i*2]}))
-        return menus, categories
 
 
     def clear(self):
@@ -388,8 +422,10 @@ class pickerWidget(QtWidgets.QFrame):
                     parent = items[0]
                     font = parent.font(0)
 
+            #child = expTreeItem(parent)
             child = QtWidgets.QTreeWidgetItem(parent)
             child.setText(0, expression.name)
+            #child.expArea.setText(expression.expression)
             child.setText(1, expression.expression)
             child.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled) #QtCore.Qt.ItemIsEditable | 
             child.setToolTip(1, expression.expression)
@@ -400,10 +436,36 @@ class pickerWidget(QtWidgets.QFrame):
                 child.setFont(column, font)
 
 
-
         #self.treeWidget.itemPressed.connect(self.onItemPressed)
         self.treeWidget.itemDoubleClicked.connect(self.onItemDoubleClicked)
         self.treeWidget.itemClicked.connect(self.onItemClicked)
         pass
 
 
+
+
+
+
+class expTreeItem(QtWidgets.QTreeWidgetItem):
+    def __init__(self, parent=None):
+        super(expTreeItem, self).__init__(parent)
+        
+        self.expArea = QtWidgets.QTextBrowser()
+        #self.expArea.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed , QtWidgets.QSizePolicy.Fixed ))
+        #self.expArea.setMinimumHeight(10)
+        vexSyntax = vexSyntaxHighlighter.vexSyntaxHighlighter(self.expArea.document())
+        self.expArea.setReadOnly(True)
+        #self.expArea.setEnabled(False)
+        #self.expArea.setMouseTracking(False)
+        self.expArea.setTextInteractionFlags(QtCore.Qt.NoTextInteraction )
+        self.expArea.setStyleSheet(stylesheet.styles["templateAreaAlt"])
+
+        self.expArea.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.treeWidget().setItemWidget(self, 1, self.expArea)
+        self.setSizeHint(1, QtCore.QSize(10, 800))
+        
+        pass
+
+
+    def text(self, column):
+        return self.expArea.toPlainText()

@@ -6,6 +6,7 @@ from kaToolsExpressionPicker import stylesheet
 reload(stylesheet)
 
 
+
 class expressionTreeWidget(QtWidgets.QTreeWidget):
     
     selected = []
@@ -21,22 +22,27 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
         #self.setDragDropMode(self.DragDrop)
         self.setDragDropMode(self.InternalMove)
         self.setAlternatingRowColors(True)
+        self.setUniformRowHeights(False)
         self.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
         self.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
         self.setStyleSheet(stylesheet.styles["tree"])
 
+
     
     def mousePressEvent(self, event):
         super(expressionTreeWidget, self).mousePressEvent(event)
+        
         self.selected = self.selectedItems()
-        if len(self.selected)>0:
+        for item in self.selected:
+            item.setSelected(False)
+        self.selected = self.itemAt(event.pos())
+        self.selected.setSelected(True)
+        if isinstance(self.selected, QtWidgets.QTreeWidgetItem):
             self.mimeData = QtCore.QMimeData()
             #mimeData.setData("application/treeItem", "1")
             #self.mimeData.setData("text/plain", self.selected[0].text(0))
-            self.mimeData.setText(self.selected[0].text(1))
-            #print self.selected[0].text(1)
+            self.mimeData.setText(self.selected.text(1))
             #print "mouse press", self.mimeData.text()
-            #mimeData = super(expressionTreeWidget, self).mimeData(self.selected)
             pass
 
     def mouseReleaseEvent(self, event):
@@ -57,11 +63,10 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
         #super(expressionTreeWidget, self).mouseMoveEvent(event)
         #print "move: ", event
         drag = QtGui.QDrag(self)
-        #drag.setMimeData(mimeData)
+
         drag.setMimeData(self.mimeData)
         drag.exec_(QtCore.Qt.CopyAction | QtCore.Qt.MoveAction, QtCore.Qt.CopyAction)
-        #drag.start(QtCore.Qt.MoveAction | QtCore.Qt.CopyAction)
-        pass
+
         
     def searchChildren(self, parent):
         for child in parent.children():
