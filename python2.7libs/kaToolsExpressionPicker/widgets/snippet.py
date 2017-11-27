@@ -151,7 +151,7 @@ class snippet(QtWidgets.QTextEdit):
             parm.set(text)
             self.pathLabel.setStyleSheet(stylesheet.styles["valid"])
         else:
-            self.pathLabel.setText("Invalid. Drop a parameter above:")
+            self.pathLabel.setText("Drag & Drop a parameter above:")
             self.pathLabel.setStyleSheet(stylesheet.styles["invalid"])
 
         if text == "" or text.startswith("\n"):
