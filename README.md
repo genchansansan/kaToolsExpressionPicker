@@ -5,7 +5,13 @@ This is module-based expression editor.
 We can write vex/python code by drag & drop....plus a little bit of editing.
 If you use one function over and over again, save it as a module, and you can grab it whenever you want from the list view!
 
-## update v0.1.018
+## Update v0.1.022
+
+- Syntax highlighting! (Partially...)
+- Clear button for filtering.
+- reconstruct some part.
+
+## Update v0.1.018
 
 - You can double-click something on a list and edit a code or name.
 - Bit better layout.
@@ -23,7 +29,7 @@ Put this repository somewhere and add its path to both:
 - HOUDINI_PYTHON_PANEL_PATH
 
 in houdini.env.
-(e.g. On Windows:
+(e.g. rename "kaToolsExpressionPicker-release" "kaToolsExpressionPicker", move it to "C:/Users/foo/Documents/houdini16.0" and then, on Windows:
 HOUDINI_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionPicker;"
 HOUDINI_PYTHON_PANEL_PATH="C:/Users/foo/Documents/houdini16.0/kaToolsExpressionPicker;")
 
