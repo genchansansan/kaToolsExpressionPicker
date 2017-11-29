@@ -11,15 +11,18 @@ reload(vexSyntaxHighlighter)
 class snippet(QtWidgets.QTextEdit):
 
     currentSize = 12
+    parent = None
 
     def __init__(self, parent=None, pathLabel = None):
         super(snippet, self).__init__(parent)
+        self.parent = parent
         self.pathLabel = pathLabel
         #self.setFontPointSize(12)
         self.setTabStopWidth(20)
         self.setAcceptRichText(True)
         self.setMouseTracking(True)
-        self.textChanged.connect(self.onSnippetTextEdited)
+        if self.pathLabel != None:
+            self.textChanged.connect(self.onSnippetTextEdited)
         vexSyntax = vexSyntaxHighlighter.vexSyntaxHighlighter(self.document())
 
 
@@ -144,17 +147,17 @@ class snippet(QtWidgets.QTextEdit):
 
     def onSnippetTextEdited (self):
         #print "edit in", self.currentSize
-        text = self.toPlainText()
+        currentText = self.toPlainText()
 
         parm = hou.parm(self.pathLabel.text())
         if parm != None:
-            parm.set(text)
+            parm.set(currentText)
             self.pathLabel.setStyleSheet(stylesheet.styles["valid"])
         else:
             self.pathLabel.setText("Drag & Drop a parameter above:")
             self.pathLabel.setStyleSheet(stylesheet.styles["invalid"])
 
-        if text == "" or text.startswith("\n"):
+        if currentText == "" or currentText.startswith("\n"):
             font = QtGui.QFont()
             font.setPointSize(self.currentSize)
             self.setCurrentFont(font)

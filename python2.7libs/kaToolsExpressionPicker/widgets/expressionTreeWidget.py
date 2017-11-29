@@ -36,14 +36,15 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
         for item in self.selected:
             item.setSelected(False)
         self.selected = self.itemAt(event.pos())
-        self.selected.setSelected(True)
-        if isinstance(self.selected, QtWidgets.QTreeWidgetItem):
-            self.mimeData = QtCore.QMimeData()
-            #mimeData.setData("application/treeItem", "1")
-            #self.mimeData.setData("text/plain", self.selected[0].text(0))
-            self.mimeData.setText(self.selected.text(1))
-            #print "mouse press", self.mimeData.text()
-            pass
+        if self.selected is not None:
+            self.selected.setSelected(True)
+            if isinstance(self.selected, QtWidgets.QTreeWidgetItem):
+                self.mimeData = QtCore.QMimeData()
+                #mimeData.setData("application/treeItem", "1")
+                #self.mimeData.setData("text/plain", self.selected[0].text(0))
+                self.mimeData.setText(self.selected.text(1))
+                #print "mouse press", self.mimeData.text()
+                pass
 
     def mouseReleaseEvent(self, event):
         super(expressionTreeWidget, self).mouseReleaseEvent(event)
@@ -62,10 +63,10 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
     def mouseMoveEvent(self, event):
         #super(expressionTreeWidget, self).mouseMoveEvent(event)
         #print "move: ", event
-        drag = QtGui.QDrag(self)
-
-        drag.setMimeData(self.mimeData)
-        drag.exec_(QtCore.Qt.CopyAction | QtCore.Qt.MoveAction, QtCore.Qt.CopyAction)
+        if self.selected is not None:
+            drag = QtGui.QDrag(self)
+            drag.setMimeData(self.mimeData)
+            drag.exec_(QtCore.Qt.CopyAction | QtCore.Qt.MoveAction, QtCore.Qt.CopyAction)
 
         
     def searchChildren(self, parent):

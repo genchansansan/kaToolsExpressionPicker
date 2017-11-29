@@ -17,7 +17,7 @@ __varTypePatterns = ["int", "float", "string", "vector"
 __varTypePatterns = ["\\b" + pattern + "\\b" for pattern in __varTypePatterns]
 
 __singleLinePattern = ["//"]
-__singleLinePattern = [pattern + "*" for pattern in __varTypePatterns]
+__singleLinePattern = [pattern + "*" for pattern in __singleLinePattern]
 
 __multilinePatternsStart = ["/\\*"]
 __multilinePatternsEnd = ["\\*/"]
@@ -25,6 +25,10 @@ __multilinePatternsEnd = ["\\*/"]
 # ("pattern", format)
 vexRules = []
 [vexRules.append((pattern, __varTypeFormat)) for pattern in __varTypePatterns]
+
+singleLineRules = []
+[singleLineRules.append((pattern, __varCommentFormat)) for pattern in __singleLinePattern]
+
 
 multiLineRules = []
 [multiLineRules.append((start, end, __varCommentFormat)) for (start, end) in zip(__multilinePatternsStart, __multilinePatternsEnd)]

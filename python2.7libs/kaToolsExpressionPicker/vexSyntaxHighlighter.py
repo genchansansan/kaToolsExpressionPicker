@@ -18,9 +18,16 @@ class vexSyntaxHighlighter(QtGui.QSyntaxHighlighter):
                 length = expression.matchedLength()
                 self.setFormat(index, length, charFormat)
                 index = expression.indexIn(text, index + length)
+        
+        for pattern, charFormat in syntaxRules.singleLineRules:
+            expression = QtCore.QRegExp(pattern)
+            index = expression.indexIn(text)
+            while index >= 0:
+                length = len(text)
+                self.setFormat(index, length - index, charFormat)
+                index = expression.indexIn(text, index + length)
 
         for start, end, charFormat in syntaxRules.multiLineRules:
-            print "start"
             startExp = QtCore.QRegExp(start)
             endExp = QtCore.QRegExp(end)
             startIndex = 0
@@ -29,10 +36,9 @@ class vexSyntaxHighlighter(QtGui.QSyntaxHighlighter):
             if self.previousBlockState() != 1:
                 startIndex = startExp.indexIn(text)
             while startIndex >= 0:
-                print "start index: ", startIndex
-                #length = startExp.matchedLength()
+                #print "start index: ", startIndex
                 endIndex = endExp.indexIn(text, startIndex)
-                print "end index: ", endIndex
+                #print "end index: ", endIndex
                 
                 if endIndex == -1:
                     self.setCurrentBlockState(1)

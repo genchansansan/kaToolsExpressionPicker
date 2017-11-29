@@ -113,10 +113,13 @@ class pickerWidget(QtWidgets.QFrame):
         self.staticSearchText = QtWidgets.QLabel()
         self.staticSearchText.setText("Filter : ")
         self.searchTextArea = QtWidgets.QLineEdit()
+        self.clearFilterButton = QtWidgets.QPushButton("Clear")
         self.searchTextArea.textEdited.connect(self.onSearchTextEdited)
         self.searchTextArea.editingFinished.connect(self.onEditFinished)
+        self.clearFilterButton.clicked.connect(self.onClearFilterClicked)
         searchLayout.addWidget(self.staticSearchText)
         searchLayout.addWidget(self.searchTextArea)
+        searchLayout.addWidget(self.clearFilterButton)
 
         labelLayout = QtWidgets.QHBoxLayout()
         self.pathLabel = QtWidgets.QLabel()
@@ -136,7 +139,6 @@ class pickerWidget(QtWidgets.QFrame):
         font = QtGui.QFont()
         font.setPointSize(12)
         self.textArea.setCurrentFont(font)
-        #self.textArea.textChanged.connect(self.onSnippetTextEdited)
         
         
         layout.addLayout(buttonLayout)
@@ -168,7 +170,7 @@ class pickerWidget(QtWidgets.QFrame):
         #self.treeWidget.editItem(item, column)
         newName = item.text(0)
         newExp = item.text(1)
-        snippetDia = snippetDialog.snippetDialog(text=item.text(column))
+        snippetDia = snippetDialog.snippetDialog(parent = self, text=item.text(column))
         result = snippetDia.exec_()
         if result == QtWidgets.QDialog.Accepted:
             if column == 0:
@@ -253,29 +255,6 @@ class pickerWidget(QtWidgets.QFrame):
 
 
 
-    def onSnippetTextEdited(self):
-        text = self.textArea.toPlainText()
-        if self.flag.flag() == self.flag.edit():
-            parm = hou.parm(self.pathLabel.text())
-            if parm != None:
-                parm.set(text)
-                self.pathLabel.setStyleSheet(stylesheet.styles["valid"])
-            else:
-                self.pathLabel.setText("Invalid. Drop a parameter above:")
-                self.pathLabel.setStyleSheet(stylesheet.styles["invalid"])
-        elif self.flag.flag() == self.flag.clear():
-            pass
-        if text == "" or text.startswith("\n"):
-            #font = QtGui.QFont()
-            #font.setPointSize(self.currentSize)
-            #self.textArea.setCurrentFont(font)
-            pass
-        else:
-            #self.currentSize = self.textArea.fontPointSize()
-            pass
-        self.flag.setFlag(self.flag.edit())
-
-
 
     def onSearchTextEdited(self, text):
         allItems = self.treeWidget.findItems("", QtCore.Qt.MatchStartsWith | QtCore.Qt.MatchRecursive)
@@ -314,6 +293,11 @@ class pickerWidget(QtWidgets.QFrame):
 
     def onEditFinished(self):
         self.treeWidget.setFocus()
+
+
+    def onClearFilterClicked(self):
+        self.searchTextArea.setText("")
+        self.onSearchTextEdited("")
 
 
     def onClearClicked(self):

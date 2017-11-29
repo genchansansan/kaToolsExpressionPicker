@@ -11,7 +11,7 @@ class snippetDialog(QtWidgets.QDialog):
         super(snippetDialog, self).__init__(parent, f)
         
         layout = QtWidgets.QVBoxLayout()
-        self.snippetTextArea = snippet.snippet()
+        self.snippetTextArea = snippet.snippet(parent = parent)
         self.snippetTextArea.setText(text)
 
         buttonLayout = QtWidgets.QHBoxLayout()
