@@ -26,7 +26,21 @@ class snippet(QtWidgets.QTextEdit):
         vexSyntax = vexSyntaxHighlighter.vexSyntaxHighlighter(self.document())
 
 
+    def autoConnect(self,node):
+        parm = node.parm("snippet")
+        if parm != None:
+            if hou.parm(self.pathLabel.text()) !=None:
+                self.removeCallBack(hou.parm(self.pathLabel.text()).node())
+            if isinstance(parm.eval(),str):
+                self.pathLabel.setText(parm.path())
+                self.setText(parm.eval())
+                self.pathLabel.setStyleSheet(stylesheet.styles["valid"])
 
+                self.setUpCallback(parm.node())
+            else:
+                print("not valid")
+        else:
+            print("not valid2")
 
     def dragEnterEvent(self, event):
         super(snippet, self).dragEnterEvent(event)

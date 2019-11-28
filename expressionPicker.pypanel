@@ -19,6 +19,11 @@ reload(pickerWidget)
 
 def createInterface():
     root = pickerWidget.pickerWidget()
+
+    hou.ui.removeAllSelectionCallbacks()
+    hou.ui.addSelectionCallback(root.onSelectionChanged)
+
+
     return root]]></script>
     <includeInPaneTabMenu menu_position="0" create_separator="false"/>
     <includeInToolbarMenu menu_position="0" create_separator="false"/>
