@@ -1,5 +1,24 @@
 <categories>
   <category name="sop">
+    <category name="atr">
+      <expression name="create pt grad"><![CDATA[float grad = float(@ptnum)/(@numpt - 1);]]></expression>
+    </category>
+    <category name="delete">
+      <expression name="remove points"><![CDATA[removepoint(geoself(), @ptnum, 1);]]></expression>
+    </category>
+    <category name="delete">
+      <expression name="random delete"><![CDATA[float rand = rand(@ptnum*1.2 + ch("seed"));
+
+if(rand>ch("keep_rate"))removepoint(geoself(), @ptnum, 1);]]></expression>
+    </category>
+    <category name="edit">
+      <expression name="ramp fit"><![CDATA[float grad  = fit(@grad, ch("min"),ch("max"),0,1);
+grad = chramp("remap", grad);
+]]></expression>
+    </category>
+    <category name="intrinsic">
+      <expression name="setprimintrinsic"><![CDATA[setprimintrinsic(geoself(), "transform", @primnum, m, "set");]]></expression>
+    </category>
     <category name="measure">
       <expression name="xyzdist"><![CDATA[int prim;
 vector uv;
@@ -8,8 +27,33 @@ int input = 1;
 float dist = xyzdist(input, @P, prim, uv);
 vector p1 = primuv(input, "P", prim, uv);]]></expression>
     </category>
-    <category name="atr">
-      <expression name="create pt grad"><![CDATA[float grad = float(@ptnum)/(@numpt - 1);]]></expression>
+    <category name="pc">
+      <expression name="pcfilter"><![CDATA[int in = 1;
+int handle = pcopen(in, "P", @P, ch("rad"), chi('max_pts'));
+
+vector pcp = pcfilter(handle, "P");]]></expression>
+    </category>
+    <category name="random">
+      <expression name="rand"><![CDATA[float rand = rand(@ptnum*1.2 + ch("seed"));
+rand = chramp("remap_rand", rand);
+rand = fit01(rand, ch("min"),ch("max"));]]></expression>
+    </category>
+    <category name="rot">
+      <expression name="extract N and up"><![CDATA[vector n = {0,1,0};
+vector up = {0,0,1};
+
+@N = qrotate(@orient, n);
+@up = qrotate(@orient, up);]]></expression>
+    </category>
+    <category name="rot">
+      <expression name="look at "><![CDATA[matrix3 m3 = lookat({0,0,0}, @N, v@up);
+
+@orient = quaternion(m3);]]></expression>
+    </category>
+    <category name="rot">
+      <expression name="double cross"><![CDATA[vector up = {0,1,0};
+vector c = cross(@N, up);
+@N = cross(@N, c);]]></expression>
     </category>
   </category>
 </categories>
