@@ -164,6 +164,14 @@ class pickerWidget(QtWidgets.QFrame):
         super(pickerWidget,self).closeEvent(event)
 
 
+    def onSelectionChanged(self,selection):
+        if len(hou.selectedNodes())>0:
+            #print hou.selectedNodes()[0].path()
+            print(selection[0].path())
+            
+            self.textArea.autoConnect(selection[0])
+            
+            pass
 
 
     def onItemDoubleClicked(self, item, column):
@@ -385,7 +393,7 @@ class pickerWidget(QtWidgets.QFrame):
             for i, categoryName in enumerate(categories):
                 items = []
                 if isinstance(parent, expressionTreeWidget.expressionTreeWidget):
-                    items = parent.findItems(categoryName, 0)
+                    items = parent.findItems(categoryName, QtCore.Qt.MatchCaseSensitive, 0)
                     #print "parent is tree"
                 elif isinstance(parent, QtWidgets.QTreeWidgetItem):
                     #print "parent is item" , parent.text(0)

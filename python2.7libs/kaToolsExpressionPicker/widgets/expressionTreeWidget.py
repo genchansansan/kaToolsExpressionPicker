@@ -28,15 +28,6 @@ class expressionTreeWidget(QtWidgets.QTreeWidget):
         self.setStyleSheet(stylesheet.styles["tree"])
 
 
-    def onSelectionChanged(self,selection):
-        if len(hou.selectedNodes())>0:
-            #print hou.selectedNodes()[0].path()
-            print selection[0].path()
-            
-            self.textArea.autoConnect(selection[0])
-            
-            pass
-
     
     def mousePressEvent(self, event):
         super(expressionTreeWidget, self).mousePressEvent(event)
