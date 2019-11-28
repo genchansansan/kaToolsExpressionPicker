@@ -142,16 +142,7 @@ class snippet(QtWidgets.QTextEdit):
                 self.setFontPointSize(self.fontPointSize()-2)
                 self.currentSize = self.fontPointSize()
                 self.setTextCursor(cursor)
-        pass
 
-
-    '''
-    def contextMenuEvent(self, event):
-        print "context"
-        super(snippet,self).contextMenuEvent(event)
-        menu = QtGui.QMenu()
-        self.menu.popup(QtGui.QCursor.pos())
-    '''
 
 
     def onSnippetTextEdited (self):
