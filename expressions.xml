@@ -1,2 +1,15 @@
 <categories>
+  <category name="sop">
+    <category name="measure">
+      <expression name="xyzdist"><![CDATA[int prim;
+vector uv;
+int input = 1;
+
+float dist = xyzdist(input, @P, prim, uv);
+vector p1 = primuv(input, "P", prim, uv);]]></expression>
+    </category>
+    <category name="atr">
+      <expression name="create pt grad"><![CDATA[float grad = float(@ptnum)/(@numpt - 1);]]></expression>
+    </category>
+  </category>
 </categories>
