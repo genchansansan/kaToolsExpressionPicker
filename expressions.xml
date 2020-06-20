@@ -1,59 +1,188 @@
 <categories>
-  <category name="sop">
-    <category name="atr">
-      <expression name="create pt grad"><![CDATA[float grad = float(@ptnum)/(@numpt - 1);]]></expression>
-    </category>
-    <category name="delete">
-      <expression name="remove points"><![CDATA[removepoint(geoself(), @ptnum, 1);]]></expression>
-    </category>
-    <category name="delete">
-      <expression name="random delete"><![CDATA[float rand = rand(@ptnum*1.2 + ch("seed"));
+  <category name="attrib">
+    <expression name="set attribute type info"><![CDATA[setattribtypeinfo(geoself(),"point", "rest", "point");
 
-if(rand>ch("keep_rate"))removepoint(geoself(), @ptnum, 1);]]></expression>
+// none, point, hpoint, vector, normal, color,
+//matrix, quaternion, indexpair,
+//integer, integer-blend, texturecoord]]></expression>
+  </category>
+  <category name="dop">
+    <category name="rbd">
+      <expression name="on collided">int found = findattribval(1, "point", "primnum", i@primnum, 0);
+
+if(found != -1)
+{
+    int hitobjid = point(1,"otherobjid", found);
+    if(hitobjid == chi("targetobjid"))
+    {
+       
+    }
+}
+</expression>
     </category>
-    <category name="edit">
-      <expression name="ramp fit"><![CDATA[float grad  = fit(@grad, ch("min"),ch("max"),0,1);
-grad = chramp("remap", grad);
+  </category>
+  <category name="sop">
+    <category name="bound">
+      <expression name="get bound"><![CDATA[vector min, max;
+getbbox(0,min,max);]]></expression>
+    </category>
+    <category name="bound">
+      <expression name="create grad"><![CDATA[vector grad = (@P - min)/(max-min);]]></expression>
+    </category>
+    <category name="delete">
+      <expression name="del by percentage"><![CDATA[float rand = rand((@ptnum + 1.233 + ch("seed")));
+
+if(rand>ch("keep_rate"))removepoint(geoself(),@ptnum);]]></expression>
+    </category>
+    <category name="delete">
+      <expression name="remove points"><![CDATA[removepoint(geoself(),@ptnum,1);]]></expression>
+    </category>
+    <category name="delete">
+      <expression name="remove prims"><![CDATA[removeprim(geoself(),@primnum,1);]]></expression>
+    </category>
+    <category name="delete">
+      <expression name="delete by age"><![CDATA[float f = fit(@age, ch("minf"),ch("maxf"),0,1);
+f = chramp("remap_f", f);
+
+float rand = rand((@id + 1.233 + ch("seed")));
+
+if(rand>f)removepoint(geoself(),@ptnum);
+
+]]></expression>
+    </category>
+    <category name="fit">
+      <expression name="frame fit"><![CDATA[
+float f = fit(@Frame, ch("minf"),ch("maxf"),0,1);
+f = chramp("remap_f", f);]]></expression>
+    </category>
+    <category name="get">
+      <expression name="point"><![CDATA[vector p1 = point(1,"P",@ptnum);]]></expression>
+    </category>
+    <category name="get">
+      <expression name="create grad\"><![CDATA[float grad = float(@ptnum)/(@numpt-1);]]></expression>
+    </category>
+    <category name="get">
+      <expression name="nuniqueval"><![CDATA[i@uni = nuniqueval(0,"point","id");]]></expression>
+    </category>
+    <category name="get">
+      <expression name="get iteration"><![CDATA[int iter = detail(1, "iteration");]]></expression>
+    </category>
+    <category name="get">
+      <expression name="lookat orient">@orient = quaternion(matrix3(lookat({0,0,0}, @N, v@up)));</expression>
+    </category>
+    <category name="get">
+      <expression name="max"><![CDATA[@P = max(@P, v@opinput1_P);]]></expression>
+    </category>
+    <category name="get">
+      <expression name="lerp"><![CDATA[@P = lerp(@P, v@opinput1_P, ch("bias"));]]></expression>
+    </category>
+    <category name="get">
+      <expression name="find attribute value"><![CDATA[int found = findattribval(1, "point", "index", i@index, 0);]]></expression>
+    </category>
+    <category name="instance">
+      <expression name="create instance attribute"><![CDATA[//p@quat = set({0,0,0,1});
+//@v=0;
+
+@scale = @pscale;
+
+@frame=1001;
+s@instanceObject = chs("path");
 ]]></expression>
     </category>
     <category name="intrinsic">
-      <expression name="setprimintrinsic"><![CDATA[setprimintrinsic(geoself(), "transform", @primnum, m, "set");]]></expression>
+      <expression name="set prim intrinsic"><![CDATA[setprimintrinsic(geoself(),"transform",@ptnum, m, "set");]]></expression>
+    </category>
+    <category name="intrinsic">
+      <expression name="get intrinsic bound "><![CDATA[float bounds[] = primintrinsic(1,"bounds",@ptnum);
+
+@P = avg(set(bounds[0],bounds[2],bounds[4]),set(bounds[1],bounds[3],bounds[5]));]]></expression>
+    </category>
+    <category name="intrinsic">
+      <expression name="apply alembic intrinsic"><![CDATA[matrix m = primintrinsic(1,"packedfulltransform",@ptnum);
+@P *= m;
+setprimintrinsic(geoself(),"transform",@ptnum, m, "set");]]></expression>
     </category>
     <category name="measure">
       <expression name="xyzdist"><![CDATA[int prim;
 vector uv;
-int input = 1;
-
-float dist = xyzdist(input, @P, prim, uv);
-vector p1 = primuv(input, "P", prim, uv);]]></expression>
+int in = 1;
+float dist = xyzdist(in, @P, prim, uv);
+vector p1 = primuv(in, "P", prim, uv);]]></expression>
     </category>
-    <category name="pc">
-      <expression name="pcfilter"><![CDATA[int in = 1;
-int handle = pcopen(in, "P", @P, ch("rad"), chi('max_pts'));
+    <category name="measure">
+      <expression name="near point"><![CDATA[int near = nearpoint(1,@P);
+vector p1 = point(1,"P",near);]]></expression>
+    </category>
+    <category name="orient">
+      <expression name="look at"><![CDATA[@orient = quaternion(lookat({0,0,0},@N,v@up));]]></expression>
+    </category>
+    <category name="parm">
+      <expression name="ramp"><![CDATA[grad = chramp("remap", grad);]]></expression>
+    </category>
+    <category name="parm">
+      <expression name="scale v">@v *= ch("scale");
+@v += chv("add");</expression>
+    </category>
+    <category name="point cloud">
+      <expression name="pcfilter"><![CDATA[int handle = pcopen(1, "P", @P, ch("rad"),chi("maxpts"));
 
-vector pcp = pcfilter(handle, "P");]]></expression>
+vector pp = pcfilter(handle, "P");]]></expression>
+    </category>
+    <category name="rand">
+      <expression name="rand fit ramp"><![CDATA[float rand = rand((@ptnum + 1.233 + ch("seed")));
+rand = chramp("remap", rand);
+rand= fit01(rand, ch("min"),ch("max"));]]></expression>
+    </category>
+    <category name="rand">
+      <expression name="random spherical N"><![CDATA[@N = sample_direction_uniform(rand(@ptnum + 1.1));]]></expression>
     </category>
     <category name="random">
-      <expression name="rand"><![CDATA[float rand = rand(@ptnum*1.2 + ch("seed"));
-rand = chramp("remap_rand", rand);
-rand = fit01(rand, ch("min"),ch("max"));]]></expression>
+      <expression name="random"><![CDATA[float rand = rand((@ptnum + 1.233 + ch("seed")));]]></expression>
     </category>
-    <category name="rot">
-      <expression name="extract N and up"><![CDATA[vector n = {0,1,0};
-vector up = {0,0,1};
+    <category name="random">
+      <expression name="rand fit"><![CDATA[float rand = rand((@ptnum + 1.233 + ch("seed")));
+rand= fit01(rand, ch("min"),ch("max"));]]></expression>
+    </category>
+    <category name="transform">
+      <expression name="peak"><![CDATA[@P += @N * ch("val");]]></expression>
+    </category>
+    <category name="visualize">
+      <expression name="speed"><![CDATA[float speed = length(@v);
+speed= fit(speed, ch("min"),ch("max"),0,1);
 
-@N = qrotate(@orient, n);
-@up = qrotate(@orient, up);]]></expression>
+@Cd = chramp("remap", speed);]]></expression>
     </category>
-    <category name="rot">
-      <expression name="look at "><![CDATA[matrix3 m3 = lookat({0,0,0}, @N, v@up);
+    <category name="volume">
+      <expression name="volume sample vector"><![CDATA[volumesamplev(1,"vel",@P);]]></expression>
+    </category>
+    <category name="volume">
+      <expression name="merge v by speed"><![CDATA[vector v1 = volumesamplev(1,"v",@P);
+vector v2 = volumesamplev(2,"v",@P);
+vector v3 = volumesamplev(3,"v",@P);
 
-@orient = quaternion(m3);]]></expression>
+float l1 = length(v1);
+float l2 = length(v2);
+float l3 = length(v3);
+
+@v = v1;
+if(l1<l2)
+{
+    @v = v2;
+    l1 = length(v2);
+}
+if(l1<l3)@v = v3;
+
+
+
+]]></expression>
     </category>
-    <category name="rot">
-      <expression name="double cross"><![CDATA[vector up = {0,1,0};
-vector c = cross(@N, up);
-@N = cross(@N, c);]]></expression>
+    <category name="group">
+      <expression name="split into groups"><![CDATA[int num = chi("num_of_groups");
+
+int mod = i@id % num;
+
+setprimgroup(geoself(),chs("base_name")+itoa(mod),@ptnum, 1);
+]]></expression>
     </category>
   </category>
 </categories>

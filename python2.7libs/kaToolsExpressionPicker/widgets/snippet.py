@@ -27,6 +27,7 @@ class snippet(QtWidgets.QTextEdit):
 
 
     def autoConnect(self,node):
+        print (node.type())
         parm = node.parm("snippet")
         if parm != None:
             if hou.parm(self.pathLabel.text()) !=None:
@@ -198,14 +199,13 @@ class snippet(QtWidgets.QTextEdit):
         try:
             linkedParm = hou.parm(self.pathLabel.text())
             parms = kwargs["parm_tuple"]
-            
+
             for parm in parms:
-                if linkedParm != None and parm !=None:
-                    if type(linkedParm.eval()) == type(parm.eval()):
-                        if self.toPlainText() != parm.eval():
-                            self.setText(parm.eval())
-                            break
-            pass
+                if linkedParm.name() == parm.name():
+                    if self.toPlainText() != parm.eval():
+                        self.setText(parm.eval())
+                        break
+
         except error:
             print error
 

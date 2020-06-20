@@ -164,15 +164,17 @@ class pickerWidget(QtWidgets.QFrame):
         super(pickerWidget,self).closeEvent(event)
 
 
-    def onSelectionChanged(self,selection):
-        if len(hou.selectedNodes())>0:
-            #print hou.selectedNodes()[0].path()
-            print(selection[0].path())
-            
-            self.textArea.autoConnect(selection[0])
-            
-            pass
+    def onSelectionChanged(self, selection):
+        node = None
+        if len(selection) > 0:
+            for each in selection:
+                if each.networkItemType() == hou.networkItemType.Node:
+                    node = each
+                    break
+        if node != None:
+            self.textArea.autoConnect(node)
 
+        pass
 
     def onItemDoubleClicked(self, item, column):
         #self.treeWidget.editItem(item, column)
