@@ -79,6 +79,14 @@ f = chramp("remap_f", f);]]></expression>
     <category name="get">
       <expression name="find attribute value"><![CDATA[int found = findattribval(1, "point", "index", i@index, 0);]]></expression>
     </category>
+    <category name="group">
+      <expression name="split into groups"><![CDATA[int num = chi("num_of_groups");
+
+int mod = i@id % num;
+
+setprimgroup(geoself(),chs("base_name")+itoa(mod),@ptnum, 1);
+]]></expression>
+    </category>
     <category name="instance">
       <expression name="create instance attribute"><![CDATA[//p@quat = set({0,0,0,1});
 //@v=0;
@@ -176,13 +184,6 @@ if(l1<l3)@v = v3;
 
 ]]></expression>
     </category>
-    <category name="group">
-      <expression name="split into groups"><![CDATA[int num = chi("num_of_groups");
-
-int mod = i@id % num;
-
-setprimgroup(geoself(),chs("base_name")+itoa(mod),@ptnum, 1);
-]]></expression>
-    </category>
   </category>
+  <category name="test"/>
 </categories>

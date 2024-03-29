@@ -2,8 +2,8 @@ import hou
 from PySide2 import QtWidgets, QtCore, QtGui
 from kaToolsExpressionPicker import stylesheet
 
-
-reload(stylesheet)
+import importlib
+importlib.reload(stylesheet)
 
 
 

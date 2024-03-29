@@ -3,8 +3,8 @@ import hou
 
 class saveDialog(QtWidgets.QDialog):
 
-    def __init__(self, parent = None, f=0):
-        super(saveDialog, self).__init__(parent, f)
+    def __init__(self, parent = None):
+        super(saveDialog, self).__init__(parent)
         self.setFocus()
 
         layout = QtWidgets.QVBoxLayout()

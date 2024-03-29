@@ -3,8 +3,9 @@ from PySide2 import QtWidgets, QtCore, QtGui
 
 from kaToolsExpressionPicker import stylesheet, vexSyntaxHighlighter
 
-reload(stylesheet)
-reload(vexSyntaxHighlighter)
+import importlib
+importlib.reload(stylesheet)
+importlib.reload(vexSyntaxHighlighter)
 
 
 
@@ -191,7 +192,7 @@ class snippet(QtWidgets.QTextEdit):
             parmname = 'snippet'
             vexpressionmenu.createSpareParmsFromChCalls(node, parmname)
         except error:
-            print "cannot create parms"
+            print ("cannot create parms")
 
 
 
@@ -207,7 +208,7 @@ class snippet(QtWidgets.QTextEdit):
                         break
 
         except error:
-            print error
+            print (error)
 
 
     def setUpCallback(self, node):

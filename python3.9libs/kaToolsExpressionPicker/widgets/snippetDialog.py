@@ -2,7 +2,8 @@ from PySide2 import QtWidgets, QtCore, QtGui
 from kaToolsExpressionPicker.widgets import snippet
 import hou
 
-reload(snippet)
+import importlib
+importlib.reload(snippet)
 
 
 class snippetDialog(QtWidgets.QDialog):

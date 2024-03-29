@@ -5,12 +5,13 @@ from PySide2 import QtWidgets, QtCore, QtGui
 from kaToolsExpressionPicker import addExpression, stylesheet, vexSyntaxHighlighter
 from kaToolsExpressionPicker.widgets import expressionTreeWidget, snippet, saveDialog, snippetDialog
 
-reload(addExpression)
-reload(stylesheet)
-reload(expressionTreeWidget)
-reload(snippet)
-reload(saveDialog)
-reload(snippetDialog)
+import importlib
+importlib.reload(addExpression)
+importlib.reload(stylesheet)
+importlib.reload(expressionTreeWidget)
+importlib.reload(snippet)
+importlib.reload(saveDialog)
+importlib.reload(snippetDialog)
 
 class editFlags:
     __edit = 0
@@ -320,14 +321,14 @@ class pickerWidget(QtWidgets.QFrame):
 
 
     def rrrr(self):
-        print "resize"
+        print ("resize")
         
         allItems = self.treeWidget.findItems("", QtCore.Qt.MatchStartsWith | QtCore.Qt.MatchRecursive)
         for item in allItems:
             count = item.childCount()
             if count==0:
-                print item.expArea.toPlainText()
-                print item.expArea.viewport().size()
+                print (item.expArea.toPlainText())
+                print (item.expArea.viewport().size())
                 item.setSizeHint(1, item.expArea.document().size().toSize()*1.1)
                 item.expArea.setFixedHeight(item.expArea.document().size().height())
 

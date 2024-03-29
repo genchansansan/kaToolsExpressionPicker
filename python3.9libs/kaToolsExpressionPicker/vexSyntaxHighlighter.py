@@ -1,8 +1,8 @@
 from PySide2 import QtWidgets, QtCore, QtGui
 
 from kaToolsExpressionPicker import syntaxRules
-
-reload(syntaxRules)
+import importlib
+importlib.reload(syntaxRules)
 
 class vexSyntaxHighlighter(QtGui.QSyntaxHighlighter):
     def __init__(self, parent = None):

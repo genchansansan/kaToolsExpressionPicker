@@ -14,7 +14,8 @@ import toolutils
 from PySide2 import QtWidgets, QtCore, QtGui
 from kaToolsExpressionPicker.widgets import pickerWidget
 
-reload(pickerWidget)
+import importlib
+importlib.reload(pickerWidget)
 
 
 def createInterface():
